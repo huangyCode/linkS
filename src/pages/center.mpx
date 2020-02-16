@@ -1,0 +1,78 @@
+<template>
+<view>
+  <view class="user">
+    <image class="header" />
+    <view class="name">Hi, Username</view>
+  </view>
+  <view class="list">
+    <view class="item">
+      <view class="label">
+        <image class="link" src="../assets/image/icon/iCON_dingdan@3x.png" mode="widthFix"/>
+        订单列表
+      </view>
+      <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
+    </view>
+    <view class="item">
+      <view>
+        <image class="link" src="../assets/image/icon/iCON_yunsong@3x.png" mode="widthFix"/>
+        地址列表
+      </view>
+      <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
+    </view>
+  </view>
+</view>  
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+
+  createPage({
+    onLoad () {}
+  })
+</script>
+<style lang="less">
+page {
+  box-sizing: border-box;
+  padding: 20rpx;
+}
+.user {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 80rpx 0rpx;
+  .header {
+    width: 128rpx;
+    height: 128rpx;
+    border: 4rpx solid rgba(255,255,255,1);
+    border-radius: 50%;
+    margin-bottom: 28rpx;
+  }
+  .name {
+    font-size:32rpx;
+    font-family:DIN-Regular,DIN;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+  }
+}
+
+.list {
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2rpx solid #FFFFFF;
+    padding: 64rpx 44rpx;
+    color: #FFF;
+    .link {
+      width: 40rpx;
+      height: 40rpx;
+    }
+  }
+  .item:last-child {
+    border-bottom: 2rpx solid #FFFFFF;
+  }
+}
+
+</style>
+

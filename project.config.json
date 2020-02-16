@@ -1,0 +1,15 @@
+{
+  "compileType": "miniprogram",
+  "setting": {
+    "newFeature": true,
+    "urlCheck": true,
+    "es6": false,
+    "postcss": true,
+    "minified": false,
+    "autoAudits": false
+  },
+  "appid": "wx4743679f97ac2e4a",
+  "projectname": "fangyi",
+  "description": "A mpx project",
+  "condition": {}
+}
