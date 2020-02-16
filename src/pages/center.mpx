@@ -1,5 +1,6 @@
 <template>
 <view>
+  <nav-bar title="个人中心" />
   <view class="user">
     <image class="header" />
     <view class="name">Hi, Username</view>
@@ -13,7 +14,7 @@
       <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
     </view>
     <view class="item">
-      <view>
+      <view class="label">
         <image class="link" src="../assets/image/icon/iCON_yunsong@3x.png" mode="widthFix"/>
         地址列表
       </view>
@@ -40,7 +41,7 @@ page {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 80rpx 0rpx;
+  padding: 40rpx 0rpx 80rpx;
   .header {
     width: 128rpx;
     height: 128rpx;
@@ -64,9 +65,18 @@ page {
     border-top: 2rpx solid #FFFFFF;
     padding: 64rpx 44rpx;
     color: #FFF;
+    font-size: 28rpx;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(255,255,255,1);
+    .label {
+      display: flex;
+      align-items: center;
+    }
     .link {
       width: 40rpx;
       height: 40rpx;
+      margin-right: 8rpx;
     }
   }
   .item:last-child {

@@ -1,16 +1,11 @@
 <script>
   // app.js
   App({
-    const
+    globalData: {
+      statusBarHeight:wx.getSystemInfoSync()['statusBarHeight']
+    },
     onLaunch: function () {
-      const that = this
-      wx.getSystemInfo({
-        success: function (res) {
-          console.log(that, res)
-          // that.globalData.statusBarHeight = res.statusBarHeight
-            
-        } 
-      })
+
     }
   })
 </script>
@@ -18,6 +13,9 @@
 <style lang="less">
 page {
   background-color: #000;
+  background-image: url('./assets/image/BG@3x.png');
+  background-repeat:no-repeat;
+  background-size: cover;
 }
 .mb-8 {
   margin-bottom: 8rpx
@@ -39,18 +37,19 @@ page {
       "backgroundColor": "#0F0F0F",
       "list": [
         {
-          "text": "Home",
           "pagePath": "pages/index",
           "iconPath": "./assets/image/tabbar/tabbar_home2@3x.png",
           "selectedIconPath": "./assets/image/tabbar/tabbar_home@3x.png"
         },
         {
-          "text": "Me",
           "pagePath": "pages/center",
           "iconPath": "./assets/image/tabbar/tabbar_me2@3x.png",
           "selectedIconPath": "./assets/image/tabbar/tabbar_me@3x.png"
         }
       ]
+    },
+    "usingComponents": {
+      "nav-bar": "./components/navbar"
     }
   }
 </script>

@@ -1,5 +1,6 @@
 <template>
 <view>
+  <nav-bar title="ACL" />
   <view class="item">
    <image src="../assets/image/pic@3x.png" mode="aspectFill" class="pic" />
    <view class="content">
@@ -15,16 +16,15 @@
   import { createPage } from '@mpxjs/core'
 
   createPage({
-    onLoad () {}
+    onLoad () {
+      
+    }
   })
 </script>
 <style lang="less">
 page {
   box-sizing: border-box;
   padding: 32rpx;
-  background-image: url('../assets/image/BG@3x.png');
-  background-repeat:no-repeat;
-  background-size: cover;
 }
 .item {
   box-sizing: border-box;
@@ -62,4 +62,3 @@ page {
   }
 }
 </style>
-
