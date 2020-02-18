@@ -1,7 +1,7 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <view class="goods">
+  <view class="goods" style="top: {{statusBarHeight}}">
     <scroll-view scroll-y scroll-with-animation class="menu-wrapper" id="menuWrapper" scroll-into-view="box{{currentIndex}}">
       <view wx:for="{{goods}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(index)">
         <text class="text border-1px" id="box{{index}}">
@@ -38,19 +38,17 @@
 
 <script>
   import { createPage } from '@mpxjs/core'
-  // import BScroll from 'better-scroll';
   const response = require('../assets/goods.json')
   createPage({
-    data() {
-      return {
-        currentIndex: 0,
-        scrollHeight: 0,
-        goods: [],
-        nameId: '',
-        listHeight: [],
-        scrollY: 0,
-        selectedFood: {}
-      };
+    data: {
+      statusBarHeight: getApp().globalData.statusBarHeight,
+      currentIndex: 0,
+      scrollHeight: 0,
+      goods: [],
+      nameId: '',
+      listHeight: [],
+      scrollY: 0,
+      selectedFood: {}
     },
     computed: {
       selectFoods() {
