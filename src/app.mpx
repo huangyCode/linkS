@@ -4,7 +4,8 @@
   import wxRequest from './utils/request'
   App({
     globalData: {
-      statusBarHeight:wx.getSystemInfoSync()['statusBarHeight']
+      statusBarHeight:wx.getSystemInfoSync()['statusBarHeight'],
+      screenHeight: wx.getSystemInfoSync()['screenHeight']
     },
     onLaunch: function () {
       wx.url = 'http://47.114.129.233:8888'
@@ -53,9 +54,10 @@ page {
 <script type="application/json">
   {
     "pages": [
+      "./pages/index",
       "./pages/goods",
-      "./pages/center",
-      "./pages/index"
+      "./pages/center"
+      
     ],
     "window": {
       "navigationStyle": "custom" 

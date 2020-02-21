@@ -1,0 +1,291 @@
+<template>
+ <view>
+  <view class="shopcart">
+    <view class="content">
+      <view class="content-left">
+        <view class="logo-wrapper" bind:tap="showList">
+          <view class="logo">
+            <image class="icon-shopping_cart" src="../assets/image/icon/iCON_goujiuche.png" />
+          </view>
+          <view class="num">{{selectFoods.length}}</view>
+        </view>
+        <view class="price highlight" >￥198</view>
+        <view class="desc">满200起送</view>
+      </view>
+      <view class="content-right">
+        <button class="pay">
+          确认订单
+        </button>
+      </view>
+    </view>
+    <!-- <view class="ball-container">
+      <view>
+        <view class="ball">
+          <view class="inner inner-hook"></view>
+        </view>
+      </view>
+    </view> -->
+    <view class="shopcart-list" wx:if="{{listShow}}">
+      <view class="list-header">
+        <view class="border">
+          <view class="title">已选商品</view>
+          <view class="empty">清空</view>
+        </view>
+      </view>
+      <view class="list-content">
+        <view>
+          <view class="food" wx:for="{{selectFoods}}">
+            <view class="name">{{item}}</view>
+            <view class="price">
+              <view>￥ 1000 </view>
+            </view>
+            <view class="cartcontrol-wrapper"></view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="list-mask" wx:if="{{listShow}}"></view>
+</view>
+</template>
+
+<script>
+  import { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    data:{
+      selectFoods: ['冰茶', '冰茶', '冰茶'],
+      listShow: false,
+      statusBarHeight: getApp().globalData.statusBarHeight
+    },
+    methods: {
+      showList() {
+        this.setData({listShow: !this.listShow})
+      }
+    }
+    
+  })
+</script>
+<style lang="less">
+.shopcart {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 50;
+  width: 100%;
+  .content {
+    display: flex;
+    height: 128rpx;
+    background:#151515;
+    border-radius:32rpx 32rpx 0px 0px;
+    font-size: 0;
+    color: rgba(255, 255, 255, 0.4);
+    .content-left {
+      flex: 1;
+      .logo-wrapper {
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        top: -42rpx;
+        margin: 0 32rpx 0 54rpx;
+        padding: 6px;
+        width: 84rpx;
+        height: 84rpx;
+        box-sizing: border-box;
+        border-radius: 50%;
+        background: #1B1B1B;
+        .logo {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          text-align: center;
+          background: #2b343c;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          &.highlight {
+            background: rgb(0, 160, 220);
+          }  
+          .icon-shopping_cart {
+              width: 36rpx;
+              height: 36rpx;
+            &.highlight {
+              color: #fff;
+            }   
+          }    
+        }      
+        .num {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 24px;
+          height: 16px;
+          line-height: 16px;
+          text-align: center;
+          border-radius: 16px;
+          font-size: 9px;
+          font-weight: 700;
+          color: #1A1919;
+          background: #ECECEC;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
+        }
+      }    
+      .price {
+        display: inline-block;
+        vertical-align: top;
+        margin-top: 12px;
+        line-height: 24px;
+        padding-right: 12px;
+        box-sizing: border-box;
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        font-size: 16px;
+        font-weight: 700;
+        &.highlight {
+          color: #fff;
+        }  
+      }    
+      .desc {
+        display: inline-block;
+        vertical-align: top;
+        margin: 12px 0 0 12px;
+        line-height: 24px;
+        font-size: 10px;
+      }  
+    }
+    .content-right {
+      flex: 0 0 105px;
+      width: 105px;
+      .pay {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: -36rpx;
+        right: 34rpx;
+        width:200rpx;
+        height:72rpx;
+        background:rgba(202,115,39,1);
+        border-radius:40rpx;
+        opacity:0.97;
+        color: #FFF;
+        font-size:24rpx;
+        font-weight:500;
+        &.not-enough {
+          background: #2b333b;
+        }
+        &.enough {
+          background: #00b43c;
+          color: #fff;
+        }
+      }
+    }
+  }
+  .ball-container {
+    .ball {
+      position: fixed;
+      left: 32px;
+      bottom: 22px;
+      z-index: 200;
+      transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+      .inner {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: rgb(0, 160, 220);
+        transition: all 0.4s linear;
+      }
+    }   
+  }
+}
+.shopcart-list {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  width: 100%;
+  transform: translate3d(0, -100%, 0);
+  &.fold-enter-active, &.fold-leave-active {
+    transition: all 0.5s
+  }
+  &.fold-enter, &.fold-leave-active {
+    transform: translate3d(0, 0, 0)
+  }
+  .list-header {
+    // height: 40px;
+    // line-height: 40px;
+    padding: 0 54rpx;
+    background: #232323;
+    .border {
+      padding:36rpx 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1rpx solid #FFF;
+      .title {
+        float: left;
+        font-size: 26rpx;
+        color: #C57126;
+      }
+      .empty {
+        float: right;
+        font-size: 24rpx;
+        color: #C57126;
+      }
+    }
+  }
+  .list-content {
+    padding: 0rpx 54rpx 64rpx;
+    max-height: 217rpx;
+    overflow: hidden;
+    background: #232323;
+    .food {
+      position: relative;
+      padding: 12px 0;
+      box-sizing: border-box;  
+      .name {
+        line-height: 24px;
+        font-size: 14px;
+        color:#FFFFFF;
+      }
+      .price {
+        position: absolute;
+        right: 90px;
+        bottom: 12px;
+        line-height: 24px; 
+        font-size: 14px;
+        font-weight: 700;
+        color: #FFFFFF;
+      }
+      .cartcontrol-wrapper {
+        position: absolute;
+        right: 0;
+        bottom: 6px;  
+      }
+    }   
+  }
+}  
+.list-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 40;
+  backdrop-filter: blur(10px);
+  opacity: 1;
+  background: rgba(7, 17, 27, 0.6);
+  &.fade-enter-active, &.fade-leave-active {
+    transition: all 0.5s;
+  }  
+  &.fade-enter, &.fade-leave-active {
+    opacity: 0;
+    background: rgba(7, 17, 27, 0);
+  }  
+}
+</style>
+
+<script type="application/json">
+  {
+    "component": true
+  }
+</script>

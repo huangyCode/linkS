@@ -1,32 +1,32 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <view class="goods" style="top: {{statusBarHeight}}">
+  <view class="goods" style="top: {{statusBarHeight}};height: {{scrollheight}}px">
     <scroll-view scroll-y scroll-with-animation class="menu-wrapper" id="menuWrapper" scroll-into-view="box{{currentIndex}}">
-      <view wx:for="{{goods}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(index)">
+      <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(item,index)">
         <text class="text border-1px" id="box{{index}}">
           {{item.name}}
         </text>
       </view>
     </scroll-view>
-    <scroll-view scroll-y scroll-with-animation bindscroll="scrollChange" class="foods-wrapper" id="foodsWrapper" scroll-into-view="{{nameId}}">
-      <view wx:for="{{goods}}" wx:key="index"  class="food-list" id="id{{index}}">
-        <view class="title">{{item.name}}</view>
-        <view>
-          <view bind:tap="selectFood(food,$event)" wx:for="{{item.foods}}" wx:key="index" class="food-item border-1px">
+    <scroll-view scroll-y scroll-with-animation class="foods-wrapper" id="foodsWrapper" scroll-into-view="{{nameId}}">
+      <view wx:key="index"  class="food-list">
+        <!-- <view class="title">{{item.name}}</view>
+        <view> -->
+          <view bind:tap="selectFood(food,$event)" wx:for="{{goods}}" wx:key="index" class="food-item border-1px">
             <view class="icon">
-              <image width="57" height="57" src="{{item.icon}}" />
+              <image width="57" height="57" src="{{item.picUrl}}" />
             </view>
             <view class="content">
               <view class="name">{{item.name}}</view>
-              <view class="desc">THE balvenie</view>
-              <view class="price">199</view>
+              <view class="desc">{{item.desc}}</view>
+              <view class="price">{{item.price}} {{item.priceUnit}}</view>
               <div class="cartcontrol-wrapper">
                 <!-- <cartcontrol @add="addFood" :food="food"></cartcontrol> -->
               </div>
             </view>
           </view>
-        </view>
+        <!-- </view> -->
       </view>
     </scroll-view>
     <!-- <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
@@ -34,21 +34,24 @@
   </view>
   <!-- <button open-type="getUserInfo" type="default" bindgetuserinfo="getUserInfo" >测试</button>
   <button open-type="getPhoneNumber" type="default" bindgetphonenumber="getPhoneNumber" >测试</button> -->
-  <view class="toolbar">
-    <view class="content-left">
-      <view class="logo-wapper">
-        <view class="logo">
-          <image src="../assets/image/icon/iCON_goujiuche.png" />
-          <view class="tip">1</view>
+  <view>
+    <shop-cart></shop-cart>
+    <!-- <view class="toolbar">
+      <view class="content-left">
+        <view class="logo-wapper">
+          <view class="logo">
+            <image src="../assets/image/icon/iCON_goujiuche.png" />
+            <view class="tip">1</view>
+          </view>
+        </view>
+        <view class="price">
+          ￥ <text class="num">198</text> 满200起送
         </view>
       </view>
-      <view class="price">
-        ￥ <text class="num">198</text> 满200起送
+      <view class="content-right">
+        <button>确认订单</button>
       </view>
-    </view>
-    <view class="content-right">
-      <button>确认订单</button>
-    </view>
+    </view> -->
   </view>
   <!-- <food @add="addFood" :food="selectedFood" ref="food"></food> -->
 </view>
@@ -57,12 +60,15 @@
 <script>
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
-  const response = require('../assets/goods.json')
   createPage({
     data: {
+      listShow: true,
       statusBarHeight: getApp().globalData.statusBarHeight,
+      screenHeight: getApp().globalData.screenHeight,
+      scrollheight: 0,
       currentIndex: 0,
-      scrollHeight: 0,
+      scrollHeight: 600,
+      list: [],
       goods: [],
       nameId: '',
       listHeight: [],
@@ -82,35 +88,23 @@
         return foods;
       }
     },
-    onLoad() {
-      this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
-      if (response.errno === 0) {
-        this.setData({goods: response.data}, () => {
-          this._calculateHeight();
-        });
-        // this.$nextTick(() => {
-        //   this._initScroll();
-         
-        // });
+    onLoad(options) {
+      this.id = options.id
+      this.setData({scrollheight: this.screenHeight - this.statusBarHeight - 70})
+      this.getList();
+    },
+    getList: async function() {
+      const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{method: "FORM"})
+      if (json.returnCode == 'SUCCESS') {
+        this.setData({list: json.returnData})
       }
     },
-    selectMenu(index) {
-      this.setData({nameId: `id${index}`, currentIndex: index})
-    },
-    scrollChange(e) {
-      console.log(e)
-      this.setData({scrollHeight: e.detail.scrollTop}, ()=> {
-        for (let i = 0; i < this.listHeight.length; i++) {
-          let height1 = this.listHeight[i];
-          let height2 = this.listHeight[i + 1];
-          console.log(height1, height2, this.scrollHeight)
-          if (!height2 || (this.scrollHeight >= height1 && this.scrollHeight < height2)) {
-              console.log(i)
-             this.setData({currentIndex: i})
-             return
-          }
-        }
-      })
+    selectMenu: async function(item, index) {
+      const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.id}&sortId=${item.id}`,{method: "FORM"})
+      if (json.returnCode == 'SUCCESS') {
+        this.setData({goods: json.returnData})
+      }
+      this.setData({currentIndex: index})
     },
     getPhoneNumber: async function (params) {
       console.log(params)
@@ -135,55 +129,25 @@
       })
       console.log(res)
     },
-    // selectFood(food, event) {
-    //   if (!event._constructed) {
-    //     return;
-    //   }
-    //   this.selectedFood = food;
-    //   this.$refs.food.show();
-    // },
-    // addFood(target) {
-    //   this._drop(target);
-    // },
-    // _drop(target) {
-    //   // 体验优化,异步执行下落动画
-    //   this.$nextTick(() => {
-    //     this.$refs.shopcart.drop(target);
-    //   });
-    // },
-    // _initScroll() {
-    //   this.meunScroll = new BScroll(this.$refs.menuWrapper, {
-    //     click: true
-    //   });
-
-    //   this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-    //     click: true,
-    //     probeType: 3
-    //   });
-
-    //   this.foodsScroll.on('scroll', (pos) => {
-    //     this.scrollY = Math.abs(Math.round(pos.y));
-    //   });
-    // },
-    _calculateHeight() {
-      const query = wx.createSelectorQuery()    // 创建节点查询器 query
-      this.goods.map((item, index)=> {
-        console.log()
-        query.select(`#id${index}`).boundingClientRect() 
-      })            
-      // query.selectViewport().scrollOffset()                 // 这段代码的意思是获取页面滑动位置的查询请求
-      query.exec((res) => {
-        console.log(res) 
-        let height = 0;
-        this.listHeight.push(height);
-        for (let i = 0; i < res.length; i++) {
-          let item = res[i];
-          height += item.height;
-          this.listHeight.push(height);
-        }
-        this.setData({listHeight: this.listHeight})                                 
-      })
-    }
+    // _calculateHeight() {
+    //   const query = wx.createSelectorQuery()    // 创建节点查询器 query
+    //   this.goods.map((item, index)=> {
+    //     console.log()
+    //     query.select(`#id${index}`).boundingClientRect() 
+    //   })            
+    //   // query.selectViewport().scrollOffset()                 // 这段代码的意思是获取页面滑动位置的查询请求
+    //   query.exec((res) => {
+    //     console.log(res) 
+    //     let height = 0;
+    //     this.listHeight.push(height);
+    //     for (let i = 0; i < res.length; i++) {
+    //       let item = res[i];
+    //       height += item.height;
+    //       this.listHeight.push(height);
+    //     }
+    //     this.setData({listHeight: this.listHeight})                                 
+    //   })
+    // }
   })
 </script>
 <style lang="less">
@@ -194,7 +158,7 @@
   overflow: hidden;
   padding: 20rpx;
   // position: absolute;
-  height: 600px;
+  // height: 600px;
   top: 56px;
   bottom: 126px;
   .menu-wrapper {
@@ -289,90 +253,14 @@
       }
     }
   }
-}
-
-.toolbar {
-  position: fixed;
-  box-sizing: border-box;
-  width:100%;
-  bottom: 0;
-  height: 128rpx;
-  background:rgba(35,35,35,1);
-  border-radius:32rpx 32rpx 0px 0px;
-  display: flex;
-  justify-content: space-between;
-  padding: 0rpx 32rpx 0 54rpx;
-  .content-left {
-    display: flex;
-    .logo-wapper {
-      position: relative;
-      width: 124rpx;
-      .logo {
-        position: absolute;
-        top: -42rpx;
-        width:84rpx;
-        height:84rpx;
-        background:rgba(27,27,27,1);
-        opacity:0.97;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        image {
-          width: 36rpx;
-          height: 36rpx;
-        }
-        .tip {
-          position: absolute;
-          text-align: center;
-          top: 6rpx;
-          right: -6rpx;
-          min-width: 25rpx;
-          height: 25rpx;
-          border-radius: 50%;
-          background: #FFF;
-          color: #333;
-          font-size:20rpx;
-        }
-      }
-    }
-    .price {
-      height:34rpx;
-      font-size:24rpx;
-      font-family:PingFangSC-Regular,PingFang SC;
-      font-weight:400;
-      color:rgba(255,255,255,1);
-      line-height:34rpx;
-      .num {
-        margin: 0 16rpx;
-        height:48rpx;
-        font-size:40rpx;
-        font-weight:bold;
-        color:rgba(255,255,255,1);
-        line-height:48rpx;
-      }
-    }
-  }
-  .content-right {
-    position: relative;
-    width: 200rpx;
-    button {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      top: -36rpx;
-      width:200rpx;
-      height:72rpx;
-      background:rgba(202,115,39,1);
-      border-radius:40rpx;
-      opacity:0.97;
-      color: #FFF;
-      font-size:24rpx;
-      font-weight:500;
-    }
-  }
-}
-   
-    
+}    
 </style>
+<script type="application/json">
+  {
+    "usingComponents": {
+      "shop-cart": "../components/shopcart"
+    }
+  }
+</script>
+
+   

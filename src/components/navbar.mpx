@@ -1,49 +1,137 @@
 <template>
-  <view class="custom flex_center" style="padding-top:{{statusBarHeight}}px">
-    <text>{{title}}</text>
+<view class="weui-navigation-bar {{extClass}}">
+  <view class="weui-navigation-bar__placeholder {{ios ? 'ios' : 'android'}}" style="padding-top: {{statusBarHeight}}px;visibility: hidden;"></view>
+  <view class="weui-navigation-bar__inner {{ios ? 'ios' : 'android'}}" style="padding-top: {{statusBarHeight}}px; color: {{color}};background: {{background}};{{displayStyle}};{{innerPaddingRight}};{{innerWidth}};">
+
+    <view class='weui-navigation-bar__left' style="{{leftWidth}}">
+      <block wx:if="{{back}}">
+        <view class="weui-navigation-bar__buttons">
+          <image bindtap="goback" class="weui-navigation-bar__button weui-navigation-bar__btn_goback"  src="./static/icon/s-arrow-back.svg" />
+        </view>
+      </block>
+      <block wx:else>
+        <slot name="left"></slot>
+      </block>
+    </view>
+
+    <view class='weui-navigation-bar__center'>
+      <view wx:if="{{loading}}" class="weui-navigation-bar__loading">
+        <view class="weui-loading" style="width:{{size.width}}rpx;height:{{size.height}}rpx;"></view>
+      </view>
+      <block wx:if="{{title}}">
+        <text>{{title}}</text>
+      </block>
+      <block wx:else>
+        <slot name="center"></slot>
+      </block>
+    </view>
+
+    <view class='weui-navigation-bar__right'>
+      <slot name="right"></slot>
+    </view>
   </view>
-  <view class="empty_custom" style="padding-top:{{statusBarHeight}}px"></view>
+</view>
+
 </template>
 
 <script>
   import { createComponent } from '@mpxjs/core'
 
   createComponent({
+    poptions: {
+        multipleSlots: true,
+        addGlobalClass: true
+    },
     properties: {
+      extClass: {
+          type: String,
+          value: ''
+      },
       title: {
-        type: String,
-        value: 'ACL'
+          type: String,
+          value: ''
+      },
+      background: {
+          type: String,
+          value: ''
+      },
+      color: {
+          type: String,
+          value: ''
+      },
+      back: {
+          type: Boolean,
+          value: true
+      },
+      loading: {
+          type: Boolean,
+          value: false
+      },
+      animated: {
+          type: Boolean,
+          value: true
+      },
+      show: {
+          type: Boolean,
+          value: true,
+          observer: '_showChange'
+      },
+      delta: {
+          type: Number,
+          value: 1
       }
     },
-    data:{
-      statusBarHeight: getApp().globalData.statusBarHeight
+    data: {
+        displayStyle: '',
+        statusBarHeight: 0,
+        innerWidth: '',
+        innerPaddingRight: '',
+        leftWidth: '',
     },
+    attached: function attached() {
+      var _this = this;
+      var isSupport = !!wx.getMenuButtonBoundingClientRect;
+      var rect = wx.getMenuButtonBoundingClientRect ? wx.getMenuButtonBoundingClientRect() : null;
+      wx.getSystemInfo({
+        success: function success(res) {
+          console.log(res)
+          var ios = !!(res.system.toLowerCase().search('ios') + 1);
+          _this.setData({
+              ios: ios,
+              statusBarHeight: res.statusBarHeight,
+              innerWidth: isSupport ? 'width:' + rect.left + 'px' : '',
+              innerPaddingRight: isSupport ? 'padding-right:' + (res.windowWidth - rect.left) + 'px' : '',
+              leftWidth: isSupport ? 'width:' + (res.windowWidth - rect.left) + 'px' : ''
+          });
+        }
+      });
+    },
+    methods: {
+      _showChange: function _showChange(show) {
+          var animated = this.data.animated;
+          var displayStyle = '';
+          if (animated) {
+              displayStyle = 'opacity: ' + (show ? '1' : '0') + ';-webkit-transition:opacity 0.5s;transition:opacity 0.5s;';
+          } else {
+              displayStyle = 'display: ' + (show ? '' : 'none');
+          }
+          this.setData({
+              displayStyle: displayStyle
+          });
+      },
+      goback() {
+        var data = this.data;
+        wx.navigateBack({
+            delta: data.delta
+        });
+        this.triggerEvent('back', { delta: data.delta }, {});
+      }
+    }
   })
 </script>
 
-<style lang="less">
-.custom{
-  position: fixed;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  top: 0;
-  left: 0;
-  height: 45px;
-  z-index: 999;
-}
-.custom text{
-  color: #fff;
-  font-size: 34rpx;
-  font-weight: 500;
-  max-width: 280rpx;
-  vertical-align:middle;
-}
-.empty_custom{
-  height: 45px;
-  width: 100%;
-}
+<style>
+page{--height:44px;--right:190rpx}.weui-navigation-bar{overflow:hidden}.weui-navigation-bar .android{--height:48px;--right:222rpx}.weui-navigation-bar__inner{position:fixed;top:0;left:0;z-index:5001;height:var(--height);display:flex;align-items:center;padding-right:var(--right);width:calc(100% - var(--right))}.weui-navigation-bar__inner .weui-navigation-bar__left{position:relative;width:var(--right);padding-left:16px;display:-webkit-box;display:-webkit-flex;display:flex;align-items:center;-webkit-box-pack:center}.weui-navigation-bar__inner .weui-navigation-bar__left .weui-navigation-bar__btn{display:inline-block;vertical-align:middle;background-repeat:no-repeat}.weui-navigation-bar__inner .weui-navigation-bar__left .weui-navigation-bar__btn_goback{font-size:12px;width:1em;height:2em;background-image:url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='24' viewBox='0 0 12 24'%3E  %3Cpath fill-opacity='.9' fill-rule='evenodd' d='M10 19.438L8.955 20.5l-7.666-7.79a1.02 1.02 0 0 1 0-1.42L8.955 3.5 10 4.563 2.682 12 10 19.438z'/%3E%3C/svg%3E");background-position:50% 50%;background-size:cover}.weui-navigation-bar__inner .weui-navigation-bar__left .weui-navigation-bar__btn_goback:active{opacity:.5}.weui-navigation-bar__inner .weui-navigation-bar__center{color:#FFF;font-size:17px;text-align:center;position:relative;flex:1;display:-webkit-box;display:-webkit-flex;display:flex;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;justify-content:center}.weui-navigation-bar__inner .weui-navigation-bar__loading{font-size:0}.weui-navigation-bar__inner .weui-navigation-bar__loading .weui-loading{margin-left:0}.weui-navigation-bar__inner .weui-navigation-bar__right{margin-right:16px}.weui-navigation-bar__placeholder{height:var(--height);background:#F8F8F8;position:relative;z-index:50}
 </style>
 
 <script type="application/json">

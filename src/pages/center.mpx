@@ -1,6 +1,6 @@
 <template>
 <view>
-  <nav-bar title="个人中心" />
+  <nav-bar title="个人中心" back="{{false}}" />
   <view class="user">
     <image class="header" />
     <view class="name">Hi, Username</view>
