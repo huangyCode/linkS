@@ -10,10 +10,10 @@
       </view>
     </scroll-view>
     <scroll-view scroll-y scroll-with-animation bindscroll="scrollChange" class="foods-wrapper" id="foodsWrapper" scroll-into-view="{{nameId}}">
-      <view wx:for="{{goods}}" class="food-list" id="id{{index}}">
+      <view wx:for="{{goods}}" wx:key="index"  class="food-list" id="id{{index}}">
         <view class="title">{{item.name}}</view>
         <view>
-          <view bind:tap="selectFood(food,$event)" wx:for="{{item.foods}}" class="food-item border-1px">
+          <view bind:tap="selectFood(food,$event)" wx:for="{{item.foods}}" wx:key="index" class="food-item border-1px">
             <view class="icon">
               <image width="57" height="57" src="{{item.icon}}" />
             </view>
@@ -32,12 +32,31 @@
     <!-- <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice"
               :minPrice="seller.minPrice"></shopcart> -->
   </view>
+  <!-- <button open-type="getUserInfo" type="default" bindgetuserinfo="getUserInfo" >测试</button>
+  <button open-type="getPhoneNumber" type="default" bindgetphonenumber="getPhoneNumber" >测试</button> -->
+  <view class="toolbar">
+    <view class="content-left">
+      <view class="logo-wapper">
+        <view class="logo">
+          <image src="../assets/image/icon/iCON_goujiuche.png" />
+          <view class="tip">1</view>
+        </view>
+      </view>
+      <view class="price">
+        ￥ <text class="num">198</text> 满200起送
+      </view>
+    </view>
+    <view class="content-right">
+      <button>确认订单</button>
+    </view>
+  </view>
   <!-- <food @add="addFood" :food="selectedFood" ref="food"></food> -->
 </view>
 </template>
 
 <script>
   import { createPage } from '@mpxjs/core'
+  import wxRequest from '../utils/request'
   const response = require('../assets/goods.json')
   createPage({
     data: {
@@ -92,6 +111,29 @@
           }
         }
       })
+    },
+    getPhoneNumber: async function (params) {
+      console.log(params)
+      const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
+        method: 'FORM',
+        query: {
+          sessionKey: wx.getStorageSync('sessionkey'),
+          openId: wx.getStorageSync('openid'),
+          encryptedData: params.detail.encryptedData,
+          iv: params.detail.iv
+        }
+      })
+      
+    },
+    getUserInfo: async function (res) {
+      const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+        method: 'FORM',
+        query: {
+          ...res.detail.userInfo,
+          openId: wx.getStorageSync('openid')
+        }
+      })
+      console.log(res)
     },
     // selectFood(food, event) {
     //   if (!event._constructed) {
@@ -151,7 +193,8 @@
   width: 100%;
   overflow: hidden;
   padding: 20rpx;
-  position: absolute;
+  // position: absolute;
+  height: 600px;
   top: 56px;
   bottom: 126px;
   .menu-wrapper {
@@ -248,6 +291,88 @@
   }
 }
 
+.toolbar {
+  position: fixed;
+  box-sizing: border-box;
+  width:100%;
+  bottom: 0;
+  height: 128rpx;
+  background:rgba(35,35,35,1);
+  border-radius:32rpx 32rpx 0px 0px;
+  display: flex;
+  justify-content: space-between;
+  padding: 0rpx 32rpx 0 54rpx;
+  .content-left {
+    display: flex;
+    .logo-wapper {
+      position: relative;
+      width: 124rpx;
+      .logo {
+        position: absolute;
+        top: -42rpx;
+        width:84rpx;
+        height:84rpx;
+        background:rgba(27,27,27,1);
+        opacity:0.97;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        image {
+          width: 36rpx;
+          height: 36rpx;
+        }
+        .tip {
+          position: absolute;
+          text-align: center;
+          top: 6rpx;
+          right: -6rpx;
+          min-width: 25rpx;
+          height: 25rpx;
+          border-radius: 50%;
+          background: #FFF;
+          color: #333;
+          font-size:20rpx;
+        }
+      }
+    }
+    .price {
+      height:34rpx;
+      font-size:24rpx;
+      font-family:PingFangSC-Regular,PingFang SC;
+      font-weight:400;
+      color:rgba(255,255,255,1);
+      line-height:34rpx;
+      .num {
+        margin: 0 16rpx;
+        height:48rpx;
+        font-size:40rpx;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+        line-height:48rpx;
+      }
+    }
+  }
+  .content-right {
+    position: relative;
+    width: 200rpx;
+    button {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: -36rpx;
+      width:200rpx;
+      height:72rpx;
+      background:rgba(202,115,39,1);
+      border-radius:40rpx;
+      opacity:0.97;
+      color: #FFF;
+      font-size:24rpx;
+      font-weight:500;
+    }
+  }
+}
    
     
 </style>

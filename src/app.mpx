@@ -1,11 +1,39 @@
+
 <script>
   // app.js
+  import wxRequest from './utils/request'
   App({
     globalData: {
       statusBarHeight:wx.getSystemInfoSync()['statusBarHeight']
     },
     onLaunch: function () {
-
+      wx.url = 'http://47.114.129.233:8888'
+      wx.login({
+        success: async function(res) {
+          if (res.code) {
+            //发起网络请求
+            console.log(res.code)
+            const json = await wxRequest(`${wx.url}/wx/user/api/getOpenId`, {
+              method: 'FORM',
+              query: {
+                code: res.code,
+              }
+            })
+            if (json.returnCode == 'SUCCESS') {
+              wx.setStorageSync('sessionkey', json.returnData.sessionKey)
+              wx.setStorageSync('openid', json.returnData.openId)
+              const json2 = await wxRequest(`${wx.url}/wx/user/api/idCheck`, {
+                method: 'FORM',
+                query: {
+                  openId: json.returnData.openId,
+                }
+              })
+            }
+          } else {
+            console.log('登录失败！' + res.errMsg)
+          }
+        }
+      })
     }
   })
 </script>
