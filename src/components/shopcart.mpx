@@ -7,7 +7,7 @@
           <view class="logo">
             <image class="icon-shopping_cart" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_goujiuche.png" />
           </view>
-          <view class="num">{{selectFoods.length}}</view>
+          <view class="num">{{foodList.length}}</view>
         </view>
         <view class="price highlight" >￥198</view>
         <view class="desc">满200起送</view>
@@ -36,10 +36,10 @@
       </view>
       <view class="list-content">
         <view>
-          <view class="food" wx:for="{{selectFoods}}">
-            <view class="name">{{item}}</view>
+          <view class="food" wx:for="{{foodList}}">
+            <view class="name">{{item.name}}</view>
             <view class="price">
-              <view>￥ 1000 </view>
+              <view>￥ {{item.price}} </view>
             </view>
             <view class="cartcontrol-wrapper"></view>
           </view>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+  import store from '../store/index'
   import { createComponent } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createComponent({
@@ -59,6 +60,9 @@
       selectFoods: ['冰茶', '冰茶', '冰茶'],
       listShow: false,
       statusBarHeight: getApp().globalData.statusBarHeight
+    },
+    computed: {
+      ...store.mapState(['foodList']),
     },
     methods: {
       getPhoneNumber: async function (params) {
@@ -91,6 +95,7 @@
         console.log(res)
       },
       showList() {
+        console.log(this.foodList)
         this.setData({listShow: !this.listShow})
       }
     },

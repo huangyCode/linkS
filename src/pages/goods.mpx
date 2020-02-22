@@ -13,17 +13,23 @@
       <view wx:key="index"  class="food-list">
         <!-- <view class="title">{{item.name}}</view>
         <view> -->
-          <view bind:tap="selectFood(food,$event)" wx:for="{{goods}}" wx:key="index" class="food-item border-1px">
+          <view wx:for="{{goods}}" wx:key="index" class="food-item border-1px">
             <view class="icon">
               <image width="57" height="57" src="{{item.picUrl}}" />
             </view>
             <view class="content">
               <view class="name">{{item.name}}</view>
               <view class="desc">{{item.desc}}</view>
-              <view class="price">{{item.price}} {{item.priceUnit}}</view>
-              <div class="cartcontrol-wrapper">
-                <!-- <cartcontrol @add="addFood" :food="food"></cartcontrol> -->
-              </div>
+              <view class="price">
+                {{item.price}} {{item.priceUnit}}
+                <div class="cartcontrol-wrapper">
+                  <view>
+                    <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
+                  </view>
+                   <view><text wx:if="{{item.count > 0}}">{{item.count}}</text></view>
+                  <image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
+                </div>
+              </view>
             </view>
           </view>
         <!-- </view> -->
@@ -58,6 +64,7 @@
 </template>
 
 <script>
+  import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
@@ -77,14 +84,13 @@
       first: true
     },
     computed: {
+      ...store.mapState(['foodList']),
       selectFoods() {
         let foods = [];
-        this.goods.forEach((good) => {
-          good.foods.forEach((food) => {
-            if (food.count) {
-              foods.push(food);
-            }
-          });
+        this.goods.forEach((goods) => {
+          if (goods.count) {
+            foods.push(goods);
+          }
         });
         return foods;
       }
@@ -93,6 +99,16 @@
       this.id = options.id
       this.setData({scrollheight: this.screenHeight - this.statusBarHeight - 70})
       this.getList();
+    },
+    add(index) {
+      this.goods[index].count =  this.goods[index].count + 1
+      store.commit('setMember', {list: this.selectFoods})
+      this.setData({goods: this.goods})
+    },
+    del(index) {
+      this.goods[index].count =  this.goods[index].count - 1
+      store.commit('setMember', {list: this.selectFoods})
+      this.setData({goods: this.goods})
     },
     getList: async function() {
       const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{method: "FORM"})
@@ -108,6 +124,8 @@
     selectMenu: async function(item, index) {
       const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.id}&sortId=${item.id}`,{method: "FORM"})
       if (json.returnCode == 'SUCCESS') {
+        json.returnData.forEach(item => item.count = 0)
+        console.log(json.returnData)
         this.setData({goods: json.returnData})
       }
       this.setData({currentIndex: index})
@@ -217,6 +235,7 @@
       background: #f3f5f7;
     }
     .food-item {
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       width:544rpx;
@@ -237,6 +256,7 @@
         }
       }
       .content {
+        flex: 1;
         .name {
           font-size:26rpx;
           font-family:PingFangSC-Medium,PingFang SC;
@@ -251,10 +271,26 @@
           margin-bottom: 24rpx;
         }
         .price {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
           font-size:34rpx;
           font-family:DINAlternate-Bold,DINAlternate;
           font-weight:bold;
-          color:rgba(160,160,160,1)
+          color:rgba(160,160,160,1);
+          .cartcontrol-wrapper {
+            margin-left: 24rpx;
+            flex: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            font-size:28rpx;
+            color: #FFF;
+            image {
+              width:38rpx;
+              height:38rpx;
+            }
+          }
         }
       }
     }
