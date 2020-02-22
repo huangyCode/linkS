@@ -1,0 +1,160 @@
+<template>
+<view>
+  <nav-bar title="ACL" />
+  <view class="box">
+    联系人
+    <view class="name">
+      <input class="input" />
+      <view class="sex">
+          <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_weixuanzhong@3x.png" /> 先生
+          <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xuanzhong@3x.png" /> 女士
+      </view>
+    </view>
+    电话
+    <input class="phone" />
+    所在地区
+    <picker mode="region" bindchange="bindRegionChange">
+      <input class="phone" value="{{region}}" readonly />
+     </picker>
+    详细地址
+    <input class="phone" />
+  </view>
+  <view class="box">
+    <view class="table">
+    <view class="row">
+      <view class="cell">
+        <image class="select" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" />
+      </view>
+      <view class="cell">
+        <view class="address">
+          秦淮区来凤小区36号501室内
+        </view>
+      </view>
+      <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" /></view>
+    </view>
+  </view>
+  </view>
+  <button class="addBtn" bindtap="save" >保存</button>
+</view>  
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import wxRequest from '../utils/request'
+  createPage({
+    data: {
+      list: [],
+      page: 1,
+      region: ''
+    },
+    bindRegionChange: function (e) {
+      console.log('picker发送选择改变，携带值为', e.detail.value)
+      this.setData({
+        region: e.detail.value
+      })
+    },
+    save() {
+      wx.navigateBack()
+    }
+  })
+</script>
+<style lang="less">
+page {
+  box-sizing: border-box;
+  padding: 32rpx;
+  margin-bottom: 120rpx;
+}
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:674rpx;
+  height:72rpx;
+  background:rgba(202,115,39,1);
+  border-radius:40rpx;
+  opacity:0.97;
+  color: #FFFFFF;
+}
+.box {
+  box-sizing: border-box;
+  width:686rpx;
+  background:rgba(0,0,0,1);
+  border-radius:18rpx;
+  opacity:0.69;
+  font-size:26rpx;
+  color: #FFF;
+  padding: 24rpx;
+  margin-bottom: 32rpx;
+  .name {
+    display: flex;
+    align-items: center;
+    margin:16rpx 0 32rpx;
+    .input {
+      width:300rpx;
+      padding: 0rpx 24rpx;
+      height:72rpx;
+      border-radius:8px;
+      color: #FFF;
+      border:2px solid rgba(197,113,38,1);
+    }
+    .sex {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      flex: 1;
+      font-size:28rpx;
+      color: #FFF;
+      image {
+        width:28rpx;
+        height:28rpx;
+        margin: 0 16rpx;
+      }
+    }
+  }
+  .phone {
+    margin:16rpx 0 32rpx;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0rpx 24rpx;
+    height:72rpx;
+    border-radius:8px;
+   color: #FFF;
+    border:2px solid rgba(197,113,38,1);
+  }
+  .table {
+    width: 100%;
+    display: table;
+    .row {
+      display: table-row;
+    }
+    .cell {
+      display: table-cell;
+      padding: 23rpx 0;
+      vertical-align: middle;
+      .select {
+        padding-right: 26rpx;
+        width:32rpx;
+        height:32rpx;
+      }
+      .action {
+        padding-left: 26rpx;
+        width:50rpx;
+        height:50rpx;
+      }
+    }
+  }
+  .address {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size:28rpx;
+    color: #C2C2C2;
+  }
+  .info {
+    color:#C2C2C2;
+    height:40rpx;
+    font-size:28rpx;
+    line-height: 40rpx;
+  }
+}
+</style>

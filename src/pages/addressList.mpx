@@ -39,7 +39,9 @@
       </view>
     </view>
   </view>
-  <button class="addBtn">新增地址</button>
+  <navigator url="address">
+    <button class="addBtn">新增地址</button>
+  </navigator>
 </view>  
 </template>
 

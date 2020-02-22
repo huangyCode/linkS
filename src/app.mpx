@@ -60,6 +60,7 @@ page {
       "./pages/orderList",
       "./pages/addressList",
       "./pages/orderDetail",
+      "./pages/address",
       "./pages/order"
      
     ],
