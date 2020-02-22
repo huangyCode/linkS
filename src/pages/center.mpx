@@ -2,24 +2,26 @@
 <view>
   <nav-bar title="个人中心" back="{{false}}" />
   <view class="user">
-    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="getUser"><image class="header" /></button>
+    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="getUser">
+      <image class="header" src="{{avatarUrl}}" />
+    </button>
     <view class="name">Hi, Username</view>
   </view>
   <view class="list">
-    <view class="item">
+    <navigator url="orderList" class="item">
       <view class="label">
         <image class="link" src="../assets/image/icon/iCON_dingdan@3x.png" mode="widthFix"/>
         订单列表
       </view>
       <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
-    </view>
-    <view class="item">
+    </navigator>
+    <navigator url="addressList" class="item">
       <view class="label">
         <image class="link" src="../assets/image/icon/iCON_yunsong@3x.png" mode="widthFix"/>
         地址列表
       </view>
       <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
-    </view>
+    </navigator>
   </view>
 </view>  
 </template>
@@ -28,19 +30,30 @@
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
+    data: {
+      nickName: '',
+      avatarUrl: ''
+    },
     onLoad () {
 
     },
     getUserInfo: async function (res) {
-      console.log(res) 
-      const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
-        method: 'FORM',
-        query: {
-          ...res.detail.userInfo,
-          openId: wx.getStorageSync('openid')
-        }
+      console.log(res)
+      this.setData({
+        nickName: res.detail.userInfo.nickName,
+        avatarUrl: res.detail.userInfo.avatarUrl,
       })
-     
+      if (!wx.setStorageSync('nickname')) {
+        wx.setStorageSync('nickname', res.detail.userInfo.nickName)
+        wx.setStorageSync('avatarurl', res.detail.userInfo.avatarUrl)
+        const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+          method: 'FORM',
+          query: {
+            ...res.detail.userInfo,
+            openId: wx.getStorageSync('openid')
+          }
+        })
+      }
     },
   })
 </script>
@@ -58,7 +71,7 @@ page {
   .header {
     width: 100%;
     height: 100%;
-    border: 4rpx solid rgba(255,255,255,1);
+    // border: 4rpx solid rgba(255,255,255,1);
     border-radius: 50%;
    
   }
