@@ -5,7 +5,7 @@
     <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="getUser">
       <image class="header" src="{{avatarUrl}}" />
     </button>
-    <view class="name">Hi, Username</view>
+    <view class="name">Hi, {{nickName}}</view>
   </view>
   <view class="list">
     <navigator url="orderList" class="item">
@@ -31,7 +31,7 @@
   import wxRequest from '../utils/request'
   createPage({
     data: {
-      nickName: '',
+      nickName: '请先登录',
       avatarUrl: ''
     },
     onLoad () {
