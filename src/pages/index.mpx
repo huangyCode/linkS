@@ -2,7 +2,7 @@
 <view>
   <nav-bar title="ACL"  back="{{false}}" />
   <navigator url="./goods?id={{item.id}}" class="item" wx:for="{{list}}" wx:key="index">
-    <image src="../assets/image/pic@3x.png" mode="aspectFill" class="pic" />
+    <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/pic@3x.png" mode="aspectFill" class="pic" />
     <view class="content">
       <view class="title mb-8">{{item.name}}</view>
       <view class="text mb-8">人均 110元/人</view>

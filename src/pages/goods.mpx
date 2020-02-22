@@ -73,7 +73,8 @@
       nameId: '',
       listHeight: [],
       scrollY: 0,
-      selectedFood: {}
+      selectedFood: {},
+      first: true
     },
     computed: {
       selectFoods() {
@@ -96,7 +97,12 @@
     getList: async function() {
       const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{method: "FORM"})
       if (json.returnCode == 'SUCCESS') {
-        this.setData({list: json.returnData})
+        this.setData({list: json.returnData}, ()=> {
+          if (this.first == true) {
+            this.setData({first: false})
+            this.selectMenu(json.returnData[0], 0)
+          }
+        })
       }
     },
     selectMenu: async function(item, index) {

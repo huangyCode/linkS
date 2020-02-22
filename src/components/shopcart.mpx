@@ -5,7 +5,7 @@
       <view class="content-left">
         <view class="logo-wrapper" bind:tap="showList">
           <view class="logo">
-            <image class="icon-shopping_cart" src="../assets/image/icon/iCON_goujiuche.png" />
+            <image class="icon-shopping_cart" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_goujiuche.png" />
           </view>
           <view class="num">{{selectFoods.length}}</view>
         </view>

@@ -85,7 +85,20 @@
       page: 1
     },
     pay() {
-      wx.navigateTo({url: 'orderList'})
+      wx.requestPayment({
+        timeStamp: '',
+        nonceStr: '',
+        package: '',
+        signType: 'MD5',
+        paySign: '',
+        success (res) {
+           wx.navigateTo({url: 'orderList'})
+        },
+        fail (res) {
+           wx.navigateTo({url: 'orderList'})
+        }
+      })
+     
     }
   })
 </script>

@@ -10,17 +10,17 @@
   <view class="list">
     <navigator url="orderList" class="item">
       <view class="label">
-        <image class="link" src="../assets/image/icon/iCON_dingdan@3x.png" mode="widthFix"/>
+        <image class="link" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingdan@3x.png" mode="widthFix"/>
         订单列表
       </view>
-      <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
+      <image class="link" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" mode="widthFix"/>
     </navigator>
     <navigator url="addressList" class="item">
       <view class="label">
-        <image class="link" src="../assets/image/icon/iCON_yunsong@3x.png" mode="widthFix"/>
+        <image class="link" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_yunsong@3x.png" mode="widthFix"/>
         地址列表
       </view>
-      <image class="link" src="../assets/image/icon/iCON_jiantoubai@3x.png" mode="widthFix"/>
+      <image class="link" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" mode="widthFix"/>
     </navigator>
   </view>
 </view>  

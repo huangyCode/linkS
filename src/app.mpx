@@ -42,7 +42,7 @@
 <style lang="less">
 page {
   background-color: #000;
-  background-image: url('./assets/image/BG@3x.png');
+  background-image: url('./assets/image/BG.png');
   background-repeat:no-repeat;
   background-size: cover;
 }
@@ -54,9 +54,9 @@ page {
 <script type="application/json">
   {
     "pages": [
-       "./pages/center",
       "./pages/index",
       "./pages/goods",
+       "./pages/center",
       "./pages/orderList",
       "./pages/addressList",
       "./pages/orderDetail",
