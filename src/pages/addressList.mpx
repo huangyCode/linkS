@@ -1,0 +1,120 @@
+<template>
+<view>
+  <nav-bar title="ACL" />
+  <view class="box">
+    <view class="table">
+      <view class="row">
+        <view class="cell">
+          <image class="select" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_weixuanzhong@3x.png" />
+        </view>
+        <view class="cell">
+          <view class="address">
+            秦淮区来凤小区36号501室内
+          </view>
+          <view class="info">
+            <text style="margin-right: 32rpx">黄先生</text> 13814088499
+          </view>
+        </view>
+        <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
+        <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
+      </view>
+    </view>
+  </view>  
+  <view class="box">  
+    <view class="table">
+      <view class="row">
+        <view class="cell">
+          <image class="select" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_weixuanzhong@3x.png" />
+        </view>
+        <view class="cell">
+          <view class="address">
+            秦淮区来凤小区36号501室内
+          </view>
+          <view class="info">
+            <text style="margin-right: 32rpx">黄先生</text> 13814088499
+          </view>
+        </view>
+        <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
+        <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
+      </view>
+    </view>
+  </view>
+  <button class="addBtn">新增地址</button>
+</view>  
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import wxRequest from '../utils/request'
+  createPage({
+    data: {
+      list: [],
+      page: 1
+    },
+  })
+</script>
+<style lang="less">
+page {
+  box-sizing: border-box;
+  padding: 32rpx;
+  margin-bottom: 120rpx;
+}
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:674rpx;
+  height:72rpx;
+  background:rgba(202,115,39,1);
+  border-radius:40rpx;
+  opacity:0.97;
+  color: #FFFFFF;
+}
+.box {
+  box-sizing: border-box;
+  width:686rpx;
+  background:rgba(0,0,0,1);
+  border-radius:18rpx;
+  opacity:0.69;
+  font-size:26rpx;
+  color: #FFF;
+  padding: 24rpx;
+  margin-bottom: 32rpx;
+  .table {
+    width: 100%;
+    display: table;
+    .row {
+      display: table-row;
+    }
+    .cell {
+      display: table-cell;
+      padding: 23rpx 0;
+      vertical-align: middle;
+      .select {
+        padding-right: 26rpx;
+        width:32rpx;
+        height:32rpx;
+      }
+      .action {
+        padding-left: 26rpx;
+        width:32rpx;
+        height:32rpx;
+        border-left: 1px solid rgba(255,255,255,0.3);
+      }
+    }
+  }
+  .address {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size:28rpx;
+    color: #C2C2C2;
+  }
+  .info {
+    color:#C2C2C2;
+    height:40rpx;
+    font-size:28rpx;
+    line-height: 40rpx;
+  }
+}
+</style>

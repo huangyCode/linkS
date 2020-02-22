@@ -54,10 +54,14 @@ page {
 <script type="application/json">
   {
     "pages": [
+       "./pages/center",
       "./pages/index",
       "./pages/goods",
-      "./pages/center"
-      
+      "./pages/orderList",
+      "./pages/addressList",
+      "./pages/orderDetail",
+      "./pages/order"
+     
     ],
     "window": {
       "navigationStyle": "custom" 

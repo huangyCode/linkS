@@ -1,0 +1,124 @@
+<template>
+<view>
+  <nav-bar title="ACL" />
+  <view class="box">
+    <view class="title">
+      <view class="left">ACL</view>
+      <view class="right">￥371</view>
+    </view>
+    <view class="order">
+      <view class="no">订单编号</view>
+      <view>20200202-1089</view>
+    </view>
+    <view class="type">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
+      等待商家确认...
+    </view>
+  </view>  
+  <view class="box">
+    <view class="title">
+      <view class="left">ACL</view>
+      <view class="right">￥371</view>
+    </view>
+    <view class="order">
+      <view class="no">订单编号</view>
+      <view>20200202-1089</view>
+    </view>
+    <view class="type">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />
+      已接单
+    </view>
+  </view>
+  <view class="box">
+    <view class="title">
+      <view class="left">ACL</view>
+      <view class="right">￥371</view>
+    </view>
+    <view class="order">
+      <view class="no">订单编号</view>
+      <view>20200202-1089</view>
+    </view>
+    <view class="type">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_yunsongqianse@3x.png" />
+      配送中
+    </view>
+  </view>  
+</view>  
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+  import wxRequest from '../utils/request'
+  createPage({
+    data: {
+      list: [],
+      page: 1
+    },
+  })
+</script>
+<style lang="less">
+page {
+  box-sizing: border-box;
+  padding: 32rpx;
+  margin-bottom: 120rpx;
+}
+.addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width:674rpx;
+  height:72rpx;
+  background:rgba(202,115,39,1);
+  border-radius:40rpx;
+  opacity:0.97;
+  color: #FFFFFF;
+}
+.box {
+  box-sizing: border-box;
+  width:686rpx;
+  background:rgba(0,0,0,1);
+  border-radius:18rpx;
+  opacity:0.69;
+  font-size:26rpx;
+  color: #FFF;
+  padding: 24rpx;
+  margin-bottom: 32rpx;
+  .title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #C57126;
+    padding: 0rpx 32rpx 34rpx;
+    border-bottom: 2rpx solid rgba(255,255,255,0.1);
+    .left {
+      font-size:26rpx;
+    }
+    .right {
+      font-size:32rpx;
+    }
+  }
+  .order {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36rpx;
+    font-size:44rpx;
+    color: #A0A0A0;
+    .no {
+      font-size: 24rpx;
+    }
+    border-bottom: 2rpx solid rgba(255,255,255,0.1);
+  }
+  .type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24rpx;
+    image {
+      width:28rpx;
+      height:28rpx;
+      margin-right: 16rpx;
+    }
+  }
+}
+</style>

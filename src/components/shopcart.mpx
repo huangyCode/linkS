@@ -13,9 +13,11 @@
         <view class="desc">满200起送</view>
       </view>
       <view class="content-right">
-        <button class="pay">
+        <!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="pay"> -->
+          <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
           确认订单
-        </button>
+          </button>
+        <!-- </button> -->
       </view>
     </view>
     <!-- <view class="ball-container">
@@ -51,7 +53,7 @@
 
 <script>
   import { createComponent } from '@mpxjs/core'
-
+  import wxRequest from '../utils/request'
   createComponent({
     data:{
       selectFoods: ['冰茶', '冰茶', '冰茶'],
@@ -59,11 +61,40 @@
       statusBarHeight: getApp().globalData.statusBarHeight
     },
     methods: {
+      getPhoneNumber: async function (params) {
+        if (wx.getStorageSync('phone')) {
+          wx.navigateTo({url: 'order'})
+        } else {
+          const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
+            method: 'FORM',
+            query: {
+              sessionKey: wx.getStorageSync('sessionkey'),
+              openId: wx.getStorageSync('openid'),
+              encryptedData: params.detail.encryptedData,
+              iv: params.detail.iv
+            }
+          })
+          if (json.returnCode == 'SUCCESS') {
+            wx.setStorageSync('phone', json.returnData.phone)
+            wx.navigateTo({url: 'order'})
+          }
+        }
+      },
+      getUserInfo: async function (res) {
+        const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+          method: 'FORM',
+          query: {
+            ...res.detail.userInfo,
+            openId: wx.getStorageSync('openid')
+          }
+        })
+        console.log(res)
+      },
       showList() {
         this.setData({listShow: !this.listShow})
       }
-    }
-    
+    },
+   
   })
 </script>
 <style lang="less">
@@ -281,6 +312,16 @@
     opacity: 0;
     background: rgba(7, 17, 27, 0);
   }  
+}
+.none {
+  height: auto;
+  line-height: auto;
+  background: none;
+  color: #FFF;
+  font-size:24rpx;
+}
+.none::after {
+  border:none
 }
 </style>
 

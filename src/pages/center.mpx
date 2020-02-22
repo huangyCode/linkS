@@ -2,7 +2,7 @@
 <view>
   <nav-bar title="个人中心" back="{{false}}" />
   <view class="user">
-    <image class="header" />
+    <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="getUser"><image class="header" /></button>
     <view class="name">Hi, Username</view>
   </view>
   <view class="list">
@@ -26,9 +26,22 @@
 
 <script>
   import { createPage } from '@mpxjs/core'
-
+  import wxRequest from '../utils/request'
   createPage({
-    onLoad () {}
+    onLoad () {
+
+    },
+    getUserInfo: async function (res) {
+      console.log(res) 
+      const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+        method: 'FORM',
+        query: {
+          ...res.detail.userInfo,
+          openId: wx.getStorageSync('openid')
+        }
+      })
+     
+    },
   })
 </script>
 <style lang="less">
@@ -43,11 +56,11 @@ page {
   align-items: center;
   padding: 40rpx 0rpx 80rpx;
   .header {
-    width: 128rpx;
-    height: 128rpx;
+    width: 100%;
+    height: 100%;
     border: 4rpx solid rgba(255,255,255,1);
     border-radius: 50%;
-    margin-bottom: 28rpx;
+   
   }
   .name {
     font-size:32rpx;
@@ -84,5 +97,16 @@ page {
   }
 }
 
+.getUser {
+  width: 128rpx;
+  height: 128rpx;
+  border: 4rpx solid #ffffff;
+  border-radius: 50%;
+  padding: 0px !important;
+   margin-bottom: 28rpx;
+}
+.getUser::after {
+  content:none
+}
 </style>
 
