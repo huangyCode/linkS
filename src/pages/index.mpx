@@ -4,12 +4,12 @@
   <navigator url="./goods?id={{item.id}}" class="item" wx:for="{{list}}" wx:key="index">
     <image src="../assets/image/pic@3x.png" mode="aspectFill" class="pic" />
     <view class="content">
-      <view class="title mb-8">ALC南通巷店 {{item.name}}</view>
+      <view class="title mb-8">{{item.name}}</view>
       <view class="text mb-8">人均 110元/人</view>
       <view class="text">营业时间：17:00 ～ 02:00</view>
     </view>
   </navigator>
-</view>  
+</view>
 </template>
 
 <script>
