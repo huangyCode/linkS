@@ -28,7 +28,7 @@
     <view class="table">
       <view class="row" wx:for="{{foodList}}">
         <view class="cell">{{item.name}}</view>
-        <view class="cell">x {{item.count}}{{item.priceUnit}}</view>
+        <view class="cell">x {{item.count}}{{item.unit}}</view>
         <view class="cell">￥{{item.price}}</view>
       </view>
     </view>
@@ -48,13 +48,13 @@
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhifufangshi@3x.png" /> 订单备注
     </view>
-    <textarea class="beak" placeholder="可说明特殊口味等" placeholder-style="color:#FFF;"  />
+    <textarea class="beak" bindinput="onChange" placeholder="可说明特殊口味等" placeholder-style="color:#FFF;"  />
   </view>
   <view class="shopcart">
     <view class="content">
       <view class="content-left">
         <view class="desc">合计</view>
-        <view class="price highlight" >￥198</view>
+        <view class="price highlight" >￥{{goodsPrice}}</view>
       </view>
       <view class="content-right">
         <button bindtap="pay" class="pay">
@@ -76,14 +76,26 @@ import { get } from "mobx";
     data: {
       list: [],
       page: 1,
-      addressList: [{}]
+      addressList: [{}],
+      desc: ''
     },
     computed: {
-      ...store.mapState(['foodList','address'])
+      ...store.mapState(['foodList','address']),
+      goodsPrice() {
+        let price = 0
+        this.foodList.forEach(element => {
+          console.log(element)
+          price += Number((element.count*element.price).toFixed(2))
+        });
+        return price
+      }
     },
     onLoad(options) {
       this.brandId = options.brandId
       this.getaddressList()
+    },
+    onChange(e) {
+      this.setData({desc: e.detail.value})
     },
     getaddressList: async function() {
       const json = await wxRequest(`${wx.url}/wx/user/api/addrList`, {
@@ -114,8 +126,8 @@ import { get } from "mobx";
         userId: wx.getStorageSync('userid'),
         brandId: Number(this.brandId),
         addressId: this.address.id,
-        desc: '',
-        amount: 300,
+        desc: this.desc,
+        amount: this.goodsPrice,
         proListStr:  JSON.stringify(arr)
       }
       const json = await wxRequest(`${wx.url}/wx/order/api/makeOrder`, {

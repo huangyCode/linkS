@@ -85,7 +85,8 @@
       goodsPrice() {
         let price = 0
         this.foodList.forEach(element => {
-          num += (element.count*element.price).toFixed(2)
+          console.log(element)
+          price += Number((element.count*element.price).toFixed(2))
         });
         return price
       }
