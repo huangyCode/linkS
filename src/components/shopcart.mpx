@@ -7,9 +7,9 @@
           <view class="logo">
             <image class="icon-shopping_cart" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_goujiuche.png" />
           </view>
-          <view class="num">{{foodList.length}}</view>
+          <view class="num" wx:if="{{goodsNumber > 0}}">{{goodsNumber}}</view>
         </view>
-        <view class="price highlight" >￥198</view>
+        <view class="price highlight" >￥{{goodsPrice}}</view>
         <view class="desc">满200起送</view>
       </view>
       <view class="content-right">
@@ -31,7 +31,7 @@
       <view class="list-header">
         <view class="border">
           <view class="title">已选商品</view>
-          <view class="empty">清空</view>
+          <view class="empty" bindtap="clearList">清空</view>
         </view>
       </view>
       <view class="list-content">
@@ -41,10 +41,8 @@
             <view class="price">
               <view>￥ {{item.price}} </view>
               <div class="cartcontrol-wrapper">
-                <view>
-                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
-                </view>
-                  <view><text wx:if="{{item.count > 0}}">{{item.count}}</text></view>
+                <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
+                <view><text wx:if="{{item.count > 0}}">{{item.count}}</text></view>
                 <image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
               </div>
             </view>
@@ -60,6 +58,7 @@
 
 <script>
   import store from '../store/index'
+  // import { multiply } from 'lodash'
   import { createComponent } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createComponent({
@@ -76,8 +75,34 @@
     },
     computed: {
       ...store.mapState(['foodList']),
+      goodsNumber() {
+        let num = 0
+        this.foodList.forEach(element => {
+          num += element.count
+        });
+        return num
+      },
+      goodsPrice() {
+        let price = 0
+        this.foodList.forEach(element => {
+          num += (element.count*element.price).toFixed(2)
+        });
+        return price
+      }
     },
     methods: {
+      add(index) {
+        this.foodList[index].count =  this.foodList[index].count + 1
+        store.commit('setMember', {list: this.foodList})
+      },
+      del(index) {
+        this.foodList[index].count =  this.foodList[index].count - 1
+        store.commit('setMember', {list: this.foodList})
+      },
+      clearList() {
+        this.setData({listShow: false})
+        store.commit('clearMember')
+      },
       getPhoneNumber: async function (params) {
         if (this.foodList.length == 0) {
           wx.showToast({title: '请选择商品', icon: 'none'})
@@ -294,14 +319,17 @@
     .food {
       position: relative;
       padding: 12px 0;
-      box-sizing: border-box;  
+      box-sizing: border-box; 
+      display: flex; 
       .name {
+        flex: 1;
         line-height: 24px;
         font-size: 14px;
         color:#FFFFFF;
       }
       .price {
-        position: absolute;
+        flex: 1;
+        // position: absolute;
         display: flex;
         justify-content: space-between;
         align-items: center;
