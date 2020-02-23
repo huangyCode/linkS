@@ -1,25 +1,25 @@
 <template>
-<view>
+<form bindsubmit="save">
   <nav-bar title="ACL" />
   <view class="box">
     联系人
     <view class="name">
-      <input class="input" />
+      <input name="contactUser" class="input" />
       <view class="sex">
-          <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_weixuanzhong@3x.png" /> 先生
-          <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xuanzhong@3x.png" /> 女士
+        <view bindtap="changeSex(1)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 先生</view>
+        <view bindtap="changeSex(2)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==2 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 女士</view>
       </view>
     </view>
     电话
-    <input class="phone" />
+    <input name="phone" class="phone" type="number" />
     所在地区
-    <picker mode="region" bindchange="bindRegionChange">
-      <input class="phone" value="{{region}}" readonly />
+    <picker name="region" mode="region" bindchange="bindRegionChange">
+      <input class="phone" value="{{region}}" disabled />
      </picker>
     详细地址
-    <input class="phone" />
+    <input name="detailAddress" class="phone" value="{{detailAddress}}" />
   </view>
-  <view class="box">
+  <!-- <view class="box" wx:if="{{select}}">
     <view class="table">
     <view class="row">
       <view class="cell">
@@ -27,15 +27,18 @@
       </view>
       <view class="cell">
         <view class="address">
-          秦淮区来凤小区36号501室内
+          {{select}}
         </view>
       </view>
-      <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" /></view>
+      <view class="cell"  bindtap="useDetail">
+        使用该地址
+        <image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
+      </view>
     </view>
+  </view> -->
   </view>
-  </view>
-  <button class="addBtn" bindtap="save" >保存</button>
-</view>  
+  <button class="addBtn" formType="submit">保存</button>
+</form>  
 </template>
 
 <script>
@@ -43,9 +46,46 @@
   import wxRequest from '../utils/request'
   createPage({
     data: {
+      sex: 1,
       list: [],
       page: 1,
-      region: ''
+      region: '',
+      detailAddress: '',
+      select: undefined,
+      longitude: '',
+      latitude: '',
+    },
+    onLoad() {
+      const that = this
+      wx.getLocation({
+        type: 'wgs84',
+        success (res) {
+          that.setData({
+            longitude: res.longitude,
+            latitude: res.latitude,
+          }, ()=> {})
+        }
+      })
+    },
+    useDetail() {
+      this.setData({detailAddress: this.select})
+    },
+    selectAddress() {
+      const that = this
+      wx.chooseLocation({
+        longitude: this.longitude,
+        latitude: this.latitude,
+        success(obj) {
+          that.setData({
+            longitude: obj.longitude,
+            latitude: obj.latitude,
+            select: obj.address
+          })
+        }
+      })
+    },
+    changeSex(value) {
+      this.setData({sex: value})
     },
     bindRegionChange: function (e) {
       console.log('picker发送选择改变，携带值为', e.detail.value)
@@ -53,8 +93,41 @@
         region: e.detail.value
       })
     },
-    save() {
-      wx.navigateBack()
+    save: async function(e) {
+      const {contactUser, phone, region, detailAddress} = e.detail.value
+      if (!contactUser) {
+        wx.showToast({title: '请填写联系人', icon: 'none'})
+        return
+      }
+      if (!phone) {
+        wx.showToast({title: '请填写联系电话', icon: 'none'})
+        return
+      }
+      if (!region && region.length < 3) {
+        wx.showToast({title: '请选择地区', icon: 'none'})
+        return
+      }
+      if (!detailAddress) {
+        wx.showToast({title: '请填写详细地址', icon: 'none'})
+        return
+      }
+      const json = await wxRequest(`${wx.url}/wx/user/api/saveAddr`, {
+        method: 'FORM',
+        query: {
+          userId:  wx.getStorageSync('userid'),
+          gender: this.sex,
+          ...e.detail.value,
+          province: region[0],
+          city: region[1],
+          area: region[2],
+        }
+      })
+      if (json.returnCode == 'SUCCESS') {
+         wx.navigateBack()
+      } else {
+         wx.showToast({title: json.returnMsg, icon: 'none'})
+      }
+     
     }
   })
 </script>

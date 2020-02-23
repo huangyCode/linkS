@@ -1,7 +1,7 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <navigator url="addressList" class="addBtn">
+  <navigator url="addressList" class="addBtn" wx:if="{{ addressList.length == 0 }}">
     <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
     添加收获地址
   </navigator>
@@ -10,10 +10,10 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
     </view>
     <view class="address">
-      秦淮区来凤小区36号501室内 <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
+      {{address.detailAddress}} <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
     </view>
     <view class="info">
-      <text style="margin-right: 32rpx">黄先生</text> 13814088499
+      <text style="margin-right: 32rpx">{{address.contactUser}}</text> {{address.phone}}
     </view>
   </view>
   <view class="box">
@@ -26,20 +26,10 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingdanbai@3x.png" /> 订单信息
     </view>
     <view class="table">
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
-      </view>
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
-      </view>
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
+      <view class="row" wx:for="{{foodList}}">
+        <view class="cell">{{item.name}}</view>
+        <view class="cell">x {{item.count}}{{item.priceUnit}}</view>
+        <view class="cell">￥{{item.price}}</view>
       </view>
     </view>
   </view>
@@ -77,28 +67,76 @@
 </template>
 
 <script>
+import { get } from "mobx";
+
+  import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
     data: {
       list: [],
-      page: 1
+      page: 1,
+      addressList: []
     },
-    pay() {
-      wx.requestPayment({
-        timeStamp: '',
-        nonceStr: '',
-        package: '',
-        signType: 'MD5',
-        paySign: '',
-        success (res) {
-           wx.navigateTo({url: 'orderList'})
-        },
-        fail (res) {
-           wx.navigateTo({url: 'orderList'})
+    computed: {
+      ...store.mapState(['foodList','address'])
+    },
+    onLoad(options) {
+      this.brandId = options.brandId
+      this.getaddressList()
+    },
+    getaddressList: async function() {
+      const json = await wxRequest(`${wx.url}/wx/user/api/addrList`, {
+        method: 'FORM',
+        query: {
+          userId: wx.getStorageSync('userid'),
         }
       })
-     
+      if (json.returnCode == 'SUCCESS') {
+        this.setData({addressList: json.returnData})
+        store.commit('setAddress', {address: json.returnData.filter(item => item.isDefault == 1)[0]})
+      }
+    },
+    pay: async function() {
+      const arr = []
+      this.foodList.forEach(item => {
+        arr.push({
+          productId: item.id,
+          // productTypeId: item.productTypeId,
+          // productType: item.productType,
+          productName: item.name,
+          price: item.price,
+          num: item.count
+        })
+      })
+      const obj = {
+        openId: wx.getStorageSync('openid'),
+        userId: wx.getStorageSync('userid'),
+        brandId: Number(this.brandId),
+        addressId: this.address.id,
+        desc: '',
+        amount: 300,
+        proListStr:  JSON.stringify(arr)
+      }
+      const json = await wxRequest(`${wx.url}/wx/order/api/makeOrder`, {
+        method: 'FORM',
+        query: obj
+      })
+      if (json.returnCode == 'SUCCESS') {
+        wx.requestPayment({
+          timeStamp: '',
+          nonceStr: '',
+          package: '',
+          signType: 'MD5',
+          paySign: '',
+          success (res) {
+            wx.redirectTo({url: 'orderList'})
+          },
+          fail (res) {
+            wx.redirectTo({url: 'orderList'})
+          }
+        })
+      }
     }
   })
 </script>

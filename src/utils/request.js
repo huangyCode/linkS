@@ -11,9 +11,13 @@ const wxRequest = async(url,params = {}) => {
         'Content-Type': params.method === 'FORM' ? 'application/x-www-form-urlencoded ' : 'application/json;charset=UTF-8;',
         // 'Authorization': data.wxSession,
         // 'Cookie': 'JSESSIONID=' + wxSession,
-        // 'sessionKey': wxSession
+        'token': wx.getStorageSync('token')
       },
       success: data => {
+        console.log(data)
+        if (data.header.token) {
+          wx.setStorageSync('token', data.header.token)
+        }
         if (data.statusCode === 401) {
          
         }

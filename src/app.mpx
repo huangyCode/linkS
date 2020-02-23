@@ -8,7 +8,8 @@
       screenHeight: wx.getSystemInfoSync()['screenHeight']
     },
     onLaunch: function () {
-      wx.url = 'http://47.114.129.233:8888'
+      const that = this
+      wx.url = 'http://1g5045n525.iask.in' // 'http://47.114.129.233:8888'
       wx.login({
         success: async function(res) {
           if (res.code) {
@@ -29,6 +30,24 @@
                   openId: json.returnData.openId,
                 }
               })
+              if (json.returnCode == 'SUCCESS') {
+                 wx.setStorageSync('userid', json2.returnData.id)
+                 wx.setStorageSync('nikename', json2.returnData.nikeName)
+                 wx.setStorageSync('phone', json2.returnData.phone)
+              }
+              wx.getUserInfo({
+                success: async function(res) {
+                  wx.setStorageSync('nickname', res.userInfo.nickName)
+                  wx.setStorageSync('avatarurl', res.userInfo.avatarUrl)
+                  const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+                    method: 'FORM',
+                    query: {
+                      ...res.userInfo,
+                      openId: wx.getStorageSync('openid')
+                    }
+                  })
+                }
+              }) 
             }
           } else {
             console.log('登录失败！' + res.errMsg)
@@ -54,6 +73,7 @@ page {
 <script type="application/json">
   {
     "pages": [
+      
       "./pages/index",
       "./pages/goods",
        "./pages/center",
@@ -64,6 +84,11 @@ page {
       "./pages/order"
      
     ],
+    "permission": {
+      "scope.userLocation": {
+        "desc": "你的位置信息将用配送"
+      }
+    },
     "window": {
       "navigationStyle": "custom" 
     },

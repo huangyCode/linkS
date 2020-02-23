@@ -41,7 +41,7 @@
   <!-- <button open-type="getUserInfo" type="default" bindgetuserinfo="getUserInfo" >测试</button>
   <button open-type="getPhoneNumber" type="default" bindgetphonenumber="getPhoneNumber" >测试</button> -->
   <view>
-    <shop-cart></shop-cart>
+    <shop-cart brandId="{{id}}"></shop-cart>
     <!-- <view class="toolbar">
       <view class="content-left">
         <view class="logo-wapper">
@@ -69,6 +69,7 @@
   import wxRequest from '../utils/request'
   createPage({
     data: {
+      id: '',
       listShow: true,
       statusBarHeight: getApp().globalData.statusBarHeight,
       screenHeight: getApp().globalData.screenHeight,
@@ -97,7 +98,7 @@
     },
     onLoad(options) {
       this.id = options.id
-      this.setData({scrollheight: this.screenHeight - this.statusBarHeight - 70})
+      this.setData({id: options.id, scrollheight: this.screenHeight - this.statusBarHeight - 70})
       this.getList();
     },
     add(index) {
@@ -124,8 +125,11 @@
     selectMenu: async function(item, index) {
       const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.id}&sortId=${item.id}`,{method: "FORM"})
       if (json.returnCode == 'SUCCESS') {
-        json.returnData.forEach(item => item.count = 0)
-        console.log(json.returnData)
+        json.returnData.forEach(v => {
+          v.count = 0,
+          v.productTypeId = item.id,
+          v.productType = item.name
+        } )
         this.setData({goods: json.returnData})
       }
       this.setData({currentIndex: index})

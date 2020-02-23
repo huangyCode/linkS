@@ -1,7 +1,8 @@
 import { createStore } from '@mpxjs/core'
 const store = createStore({
   state: {
-    foodList: []
+    foodList: [],
+    address: {}
   },
   mutations: {
     setMember(state, { list }) {
@@ -13,6 +14,9 @@ const store = createStore({
     delMember(state, { index }) {
       console.log(index)
       state.foodList.splice(index, 1)
+    },
+    setAddress(state, {address}) {
+      state.address = address
     }
   }
 })
