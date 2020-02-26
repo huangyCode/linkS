@@ -18,6 +18,7 @@
      </picker>
     详细地址
     <input name="detailAddress" class="phone" value="{{detailAddress}}" />
+    <view class="def" bindtap="changeDefalut()"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{isDefault==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 设为默认1地址</view>
   </view>
   <!-- <view class="box" wx:if="{{select}}">
     <view class="table">
@@ -54,6 +55,7 @@
       select: undefined,
       longitude: '',
       latitude: '',
+      isDefault: 1
     },
     onLoad() {
       const that = this
@@ -66,6 +68,9 @@
           }, ()=> {})
         }
       })
+    },
+    changeDefalut() {
+      this.setData({isDefault: this.isDefault == 1? 0: 1})
     },
     useDetail() {
       this.setData({detailAddress: this.select})
@@ -120,6 +125,7 @@
           province: region[0],
           city: region[1],
           area: region[2],
+          isDefault: this.isDefault
         }
       })
       if (json.returnCode == 'SUCCESS') {
@@ -147,6 +153,15 @@ page {
   border-radius:40rpx;
   opacity:0.97;
   color: #FFFFFF;
+}
+.def {
+  display: flex;
+  align-items: center;
+  image {
+    width: 42rpx;
+    height: 42rpx;
+    margin-right: 16rpx;
+  }
 }
 .box {
   box-sizing: border-box;
