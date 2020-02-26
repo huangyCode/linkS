@@ -129,6 +129,11 @@
           orderId: this.id
         }
       })
+      if (json.returnCode == 'SUCCESS') {
+        wx.navigateBack()
+      } else {
+        wx.showToast({title: json.returnData.msg, icon: 'none'})
+      }
     }
   })
 </script>
