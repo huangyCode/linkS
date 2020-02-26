@@ -90,8 +90,7 @@
         this.foodList[options.brandId].forEach(element => {
           price += Number((element.count*element.price).toFixed(2))
         });
-        console.log(price)
-        this.setData({goodsPrice: price, brandId: options.brandId})
+        this.setData({goodsPrice: Number(price).toFixed(2), brandId: options.brandId})
       }
       this.getaddressList()
     },
