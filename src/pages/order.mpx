@@ -135,19 +135,26 @@ import { get } from "mobx";
         query: obj
       })
       if (json.returnCode == 'SUCCESS') {
-        wx.requestPayment({
-          timeStamp: '',
-          nonceStr: '',
-          package: '',
-          signType: 'MD5',
-          paySign: '',
-          success (res) {
-            wx.redirectTo({url: 'orderList'})
-          },
-          fail (res) {
-            wx.redirectTo({url: 'orderList'})
-          }
-        })
+        if (json.returnData.status == 200) {
+          console.log(json.returnData.data)
+          wx.requestPayment({
+            timeStamp: json.returnData.data.timeStamp,
+            nonceStr: json.returnData.data.nonceStr,
+            package: json.returnData.data.prepay_id,
+            signType: json.returnData.data.signType,
+            paySign: json.returnData.data.paySign,
+            success (res) {
+              wx.redirectTo({url: 'orderList'})
+            },
+            fail (res) {
+              console.log(res)
+              // wx.redirectTo({url: 'orderList'})
+            }
+          })
+        } else {
+          wx.showToast({title: json.returnData.msg, icon: 'none'})
+        }
+       
       } else {
         wx.showToast({title: json.returnMsg, icon: 'none'})
       }

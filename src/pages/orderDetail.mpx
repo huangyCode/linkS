@@ -2,23 +2,42 @@
 <view>
   <nav-bar title="ACL" />
   <view class="addBtn">
-    <view class="no">NO.20200202-1089</view>
-    <view><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />已下单</view>
+    <view class="no">NO.{{address.orderCode}}</view>
+    <view class="type" wx:if="{{order.status == 0}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
+      等待商家确认...
+    </view>
+    <view class="type" wx:if="{{order.status == 1}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />
+      已接单
+    </view>
+    <view class="type" wx:if="{{order.status == 3}}">
+       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_yunsongqianse@3x.png" />
+      配送中
+    </view>
+    <view class="type" wx:if="{{order.status == 4}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
+      订单完成
+    </view>
+    <view class="type" wx:if="{{order.status == 5}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_guanbi@3x.png" />
+      已取消
+    </view>
   </view>
   <view class="box">
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
     </view>
     <view class="address">
-      秦淮区来凤小区36号501室内 <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
+      {{address.addressDetail}} <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
     </view>
     <view class="info">
-      <text style="margin-right: 32rpx">黄先生</text> 13814088499
+      <text style="margin-right: 32rpx">{{address.contactUser}}</text> {{address.phone}}
     </view>
   </view>
   <view class="box">
     <view class="header">
-      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dianpu@3x.png" /> ACL南通巷店
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dianpu@3x.png" /> {{order.brandName}}
     </view>
   </view>
   <view class="box">
@@ -26,20 +45,10 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingdanbai@3x.png" /> 订单信息
     </view>
     <view class="table">
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
-      </view>
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
-      </view>
-      <view class="row">
-        <view class="cell">Margarita</view>
-        <view class="cell">x 1杯</view>
-        <view class="cell">￥98</view>
+      <view class="row" wx:for="{{order.productList}}" wx:key="index">
+        <view class="cell">{{item.productName}}</view>
+        <view class="cell">x {{item.number}}</view>
+        <view class="cell">￥{{item.productPrice}}</view>
       </view>
     </view>
   </view>
@@ -58,7 +67,7 @@
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhifufangshi@3x.png" /> 订单备注
     </view>
-    <view class="beak">多加酸，多给冰块</view>
+    <view class="beak">{{order.desc}}</view>
     <view class="table">
       <view class="row">
         <view class="cell">下单时间</view>
@@ -70,7 +79,7 @@
       </view>
       <view class="row">
         <view class="cell">商家品牌</view>
-        <view class="cell">ALC</view>
+        <view class="cell">{{order.brandName}}</view>
       </view>
       <view class="row">
         <view class="cell">商家电话</view>
@@ -78,8 +87,8 @@
       </view>
     </view>
   </view>
-  <view class="shopcart">
-    <view class="content">
+  <view class="shopcart" wx:if="{{order.status == 0}}">
+    <view class="content" bind:tap="cancel">
       取消订单
     </view>
   </view>  
@@ -92,8 +101,35 @@
   createPage({
     data: {
       list: [],
-      page: 1
+      address: {},
+      order: {}
     },
+    onLoad(options) {
+      this.id = options.id
+      this.getInfo()
+    },
+    getInfo: async function() {
+      const json = await wxRequest(`${wx.url}/wx/order/api/detail`, {
+        method: 'FORM',
+        query: {
+          orderId: this.id
+        }
+      })
+      if (json.returnCode == 'SUCCESS') {
+        this.setData({
+          address: json.returnData.address,
+          order: json.returnData.order,
+        })
+      }
+    },
+    cancel: async function() {
+      const json = await wxRequest(`${wx.url}/wx/order/api/refund`, {
+        method: 'FORM',
+        query: {
+          orderId: this.id
+        }
+      })
+    }
   })
 </script>
 <style lang="less">
@@ -116,8 +152,16 @@ page {
   padding: 28rpx 24rpx;
   margin-bottom: 32rpx;
   .no {
+    display: -webkit-box;
+    flex: 1;
+    -webkit-line-clamp:1;
+    -webkit-box-orient: vertical; 
     font-size:40rpx;
     color:#A0A0A0;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
   }
   image {
     width:28rpx;

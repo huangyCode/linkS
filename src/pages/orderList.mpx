@@ -1,21 +1,37 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <view class="box">
+  <navigator url="orderDetail?id={{item.id}}" class="box" wx:for="{{list}}" wx:key="index">
     <view class="title">
-      <view class="left">ACL</view>
-      <view class="right">￥371</view>
+      <view class="left">{{item.brandName}}</view>
+      <view class="right">￥{{item.amount}}</view>
     </view>
     <view class="order">
       <view class="no">订单编号</view>
-      <view>20200202-1089</view>
+      <text>{{item.code}}</text>
     </view>
-    <view class="type">
+    <view class="type" wx:if="{{item.status == 0}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
       等待商家确认...
     </view>
-  </view>  
-  <view class="box">
+    <view class="type" wx:if="{{item.status == 1}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />
+      已接单
+    </view>
+    <view class="type" wx:if="{{item.status == 3}}">
+       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_yunsongqianse@3x.png" />
+      配送中
+    </view>
+    <view class="type" wx:if="{{item.status == 4}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
+      订单完成
+    </view>
+    <view class="type" wx:if="{{item.status == 5}}">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_guanbi@3x.png" />
+      已取消
+    </view>
+  </navigator>  
+  <!-- <view class="box">
     <view class="title">
       <view class="left">ACL</view>
       <view class="right">￥371</view>
@@ -42,7 +58,7 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_yunsongqianse@3x.png" />
       配送中
     </view>
-  </view>  
+  </view>   -->
 </view>  
 </template>
 
@@ -53,6 +69,21 @@
     data: {
       list: [],
       page: 1
+    },
+    onShow() {
+      this.getList()
+    },
+    getList: async function() {
+      const json = await wxRequest(`${wx.url}/wx/order/api/list`, {
+        method: 'FORM',
+        query: {
+          pageIndex: this.page,
+          pageSize: 10
+        }
+      })
+      if (json.returnCode == 'SUCCESS') {
+        this.setData({list: json.returnData})
+      }
     },
   })
 </script>
@@ -98,6 +129,7 @@ page {
     }
   }
   .order {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -106,6 +138,15 @@ page {
     color: #A0A0A0;
     .no {
       font-size: 24rpx;
+    }
+    text {
+      flex:1;
+      overflow:hidden;
+      word-wrap:break-word;
+      word-break:break-all;
+      display:flex;
+      align-items: center;
+      justify-content: center;
     }
     border-bottom: 2rpx solid rgba(255,255,255,0.1);
   }
