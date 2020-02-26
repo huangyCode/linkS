@@ -1,7 +1,7 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <view class="box" wx:for="{{list}}" wx:key="index">
+  <view class="box" bindtap="handleClick(item)" wx:for="{{list}}" wx:key="index">
     <view class="table">
       <view class="row">
         <view class="cell" bindtap="selectDefault(item)">
@@ -46,12 +46,16 @@
 </template>
 
 <script>
+  import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
     data: {
       list: [],
       page: 1
+    },
+    onLoad(options) {
+      this.from = options.from
     },
     onShow() {
       this.getList()
@@ -80,6 +84,12 @@
       if (json.returnCode == 'SUCCESS') {
         this.getList()
       } 
+    },
+    handleClick(item) {
+      if (this.from == 'order') {
+        store.commit('setAddress', {address: item})
+        wx.navigateBack()
+      }
     },
     getList: async function() {
       const json = await wxRequest(`${wx.url}/wx/user/api/addrList`, {

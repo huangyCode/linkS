@@ -5,7 +5,7 @@
     <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
     添加收获地址
   </navigator>
-  <view class="box" wx:if="{{address.id}}">
+  <navigator url="addressList?from=order" class="box" wx:if="{{address.id}}">
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
     </view>
@@ -15,7 +15,7 @@
     <view class="info">
       <text style="margin-right: 32rpx">{{address.contactUser}}</text> {{address.phone}}
     </view>
-  </view>
+  </navigator>
   <view class="box">
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dianpu@3x.png" /> ACL南通巷店
@@ -26,7 +26,7 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingdanbai@3x.png" /> 订单信息
     </view>
     <view class="table">
-      <view class="row" wx:for="{{foodList}}">
+      <view class="row" wx:for="{{foodList[brandId]}}" wx:key="index">
         <view class="cell">{{item.name}}</view>
         <view class="cell">x {{item.count}}{{item.unit}}</view>
         <view class="cell">￥{{item.price}}</view>
@@ -67,8 +67,6 @@
 </template>
 
 <script>
-import { get } from "mobx";
-
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
@@ -77,21 +75,24 @@ import { get } from "mobx";
       list: [],
       page: 1,
       addressList: [{}],
-      desc: ''
+      desc: '',
+      goodsPrice: 0,
+      brandId: ''
     },
     computed: {
       ...store.mapState(['foodList','address']),
-      goodsPrice() {
-        let price = 0
-        this.foodList.forEach(element => {
-          console.log(element)
-          price += Number((element.count*element.price).toFixed(2))
-        });
-        return price
-      }
+      
     },
     onLoad(options) {
-      this.brandId = options.brandId
+      console.log(options)
+      let price = 0
+      if (this.foodList[options.brandId] && this.foodList[options.brandId].length > 0) {
+        this.foodList[options.brandId].forEach(element => {
+          price += Number((element.count*element.price).toFixed(2))
+        });
+        console.log(price)
+        this.setData({goodsPrice: price, brandId: options.brandId})
+      }
       this.getaddressList()
     },
     onChange(e) {
@@ -111,7 +112,7 @@ import { get } from "mobx";
     },
     pay: async function() {
       const arr = []
-      this.foodList.forEach(item => {
+      this.foodList[this.brandId].forEach(item => {
         arr.push({
           productId: item.id,
           // productTypeId: item.productTypeId,

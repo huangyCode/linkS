@@ -36,7 +36,7 @@
       </view>
       <view class="list-content">
         <view>
-          <view class="food" wx:for="{{foodList}}">
+          <view class="food" wx:for="{{foodList[brandId]}}">
             <view class="name">{{item.name}}</view>
             <view class="price">
               <view>￥ {{item.price}} </view>
@@ -59,13 +59,13 @@
 <script>
   import store from '../store/index'
   // import { multiply } from 'lodash'
-  import { createComponent } from '@mpxjs/core'
+  import { create, createComponent } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createComponent({
     properties: {
       brandId: {
-          type: String,
-          value: ''
+        type: String,
+        value: ''
       },
     },
     data:{
@@ -77,27 +77,31 @@
       ...store.mapState(['foodList']),
       goodsNumber() {
         let num = 0
-        this.foodList.forEach(element => {
-          num += element.count
-        });
+        if (this.foodList[this.brandId] && this.foodList[this.brandId].length > 0) {
+          this.foodList[this.brandId].forEach(element => {
+            num += element.count
+          });
+          return num
+        }
         return num
       },
       goodsPrice() {
         let price = 0
-        this.foodList.forEach(element => {
-          console.log(element)
-          price += Number((element.count*element.price).toFixed(2))
-        });
-        return price
+        if (this.foodList[this.brandId] && this.foodList[this.brandId].length > 0) {
+          this.foodList[this.brandId].forEach(element => {
+            price += Number((element.count*element.price).toFixed(2))
+          });
+        }
+        return Number(price).toFixed(2)
       }
     },
     methods: {
       add(index) {
-        this.foodList[index].count =  this.foodList[index].count + 1
+        this.foodList[this.brandId][index].count =  this.foodList[this.brandId][index].count + 1
         store.commit('setMember', {list: this.foodList})
       },
       del(index) {
-        this.foodList[index].count =  this.foodList[index].count - 1
+        this.foodList[this.brandId][index].count =  this.foodList[this.brandId][index].count - 1
         store.commit('setMember', {list: this.foodList})
       },
       clearList() {
@@ -105,7 +109,8 @@
         store.commit('clearMember')
       },
       getPhoneNumber: async function (params) {
-        if (this.foodList.length == 0) {
+        console.log(this.foodList, this.brandId)
+        if (this.foodList[this.brandId].length == 0) {
           wx.showToast({title: '请选择商品', icon: 'none'})
           return
         }

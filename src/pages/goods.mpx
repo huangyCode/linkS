@@ -41,7 +41,7 @@
   <!-- <button open-type="getUserInfo" type="default" bindgetuserinfo="getUserInfo" >测试</button>
   <button open-type="getPhoneNumber" type="default" bindgetphonenumber="getPhoneNumber" >测试</button> -->
   <view>
-    <shop-cart brandId="{{id}}"></shop-cart>
+    <shop-cart brandId="{{brandId}}"></shop-cart>
     <!-- <view class="toolbar">
       <view class="content-left">
         <view class="logo-wapper">
@@ -82,7 +82,8 @@
       listHeight: [],
       scrollY: 0,
       selectedFood: {},
-      first: true
+      first: true,
+      brandId: '',
     },
     computed: {
       ...store.mapState(['foodList']),
@@ -94,21 +95,23 @@
           }
         });
         return foods;
-      }
+      },
     },
     onLoad(options) {
-      this.id = options.id
+      this.brandId = options.id
       this.setData({id: options.id, scrollheight: this.screenHeight - this.statusBarHeight - 70})
       this.getList();
     },
     add(index) {
       this.goods[index].count =  this.goods[index].count + 1
-      store.commit('setMember', {list: this.selectFoods})
+      this.foodList[this.brandId] = this.selectFoods
+      store.commit('setMember', {list: this.foodList})
       this.setData({goods: this.goods})
     },
     del(index) {
       this.goods[index].count =  this.goods[index].count - 1
-      store.commit('setMember', {list: this.selectFoods})
+      this.foodList[this.brandId] = this.selectFoods
+      store.commit('setMember', {list: this.foodList})
       this.setData({goods: this.goods})
     },
     getList: async function() {
@@ -123,7 +126,7 @@
       }
     },
     selectMenu: async function(item, index) {
-      const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.id}&sortId=${item.id}`,{method: "FORM"})
+      const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.brandId}&sortId=${item.id}`,{method: "FORM"})
       if (json.returnCode == 'SUCCESS') {
         json.returnData.forEach(v => {
           v.count = 0,
