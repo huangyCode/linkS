@@ -10,13 +10,16 @@
           <view class="num" wx:if="{{goodsNumber > 0}}">{{goodsNumber}}</view>
         </view>
         <view class="price highlight" >￥{{goodsPrice}}</view>
-        <view class="desc" wx:if="{{openShop}}">满200起送</view>
+        <view class="desc" wx:if="{{openShop}}">满{{deliveryThreshold}}起送</view>
         <view class="desc" wx:if="{{!openShop}}">店铺休息中</view>
       </view>
       <view class="content-right">
         <!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="pay"> -->
-          <button wx:if="{{openShop}}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
+          <button wx:if="{{openShop && goodsPrice >=deliveryThreshold  }}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
           确认订单
+          </button>
+          <button wx:if="{{openShop && goodsPrice  < deliveryThreshold}}"  class="close">
+            满{{deliveryThreshold}}起送
           </button>
           <button wx:if="{{!openShop}}" bindtap="showClose" class="close">
           休息中...
@@ -60,6 +63,7 @@
 </template>
 
 <script>
+import { values } from 'mobx'
   import store from '../store/index'
   // import { multiply } from 'lodash'
   import { create, createComponent } from '@mpxjs/core'
@@ -73,6 +77,10 @@
       openShop: {
         type: Boolean,
         value: true
+      },
+      deliveryThreshold: {
+        type: Number,
+        value: 0
       }
     },
     data:{

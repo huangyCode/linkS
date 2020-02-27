@@ -41,7 +41,7 @@
   <!-- <button open-type="getUserInfo" type="default" bindgetuserinfo="getUserInfo" >测试</button>
   <button open-type="getPhoneNumber" type="default" bindgetphonenumber="getPhoneNumber" >测试</button> -->
   <view>
-    <shop-cart brandId="{{brandId}}" openShop="{{openShop}}"></shop-cart>
+    <shop-cart brandId="{{brandId}}" deliveryThreshold="{{deliveryThreshold}}" openShop="{{openShop}}"></shop-cart>
     <!-- <view class="toolbar">
       <view class="content-left">
         <view class="logo-wapper">
@@ -85,6 +85,7 @@
       first: true,
       brandId: '',
       openShop: true,
+      deliveryThreshold: 0
     },
     computed: {
       ...store.mapState(['foodList']),
@@ -102,11 +103,9 @@
       this.brandId = options.id
       const myDate = new Date();
       const day = `${myDate.getFullYear()}-${myDate.getMonth()+1}-${myDate.getDate()}`
-      console.log(day) // myDate.getHours()
       const time = new Date(`${day} 03:${myDate.getMinutes()}:${myDate.getSeconds()}`).valueOf()
       const beginDate = new Date(`${day} ${options.openTime}`).valueOf();
       const endDate = new Date(`${day} ${options.closeTime}`).valueOf();
-      console.log(time, beginDate, endDate)
       if (time >= beginDate && time <= endDate) {
         console.log('open')
         this.setData({openShop: true})
@@ -114,7 +113,7 @@
         console.log('close')
         this.setData({openShop: false})
       }
-      this.setData({id: options.id, scrollheight: this.screenHeight - this.statusBarHeight - 70})
+      this.setData({id: options.id, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 70})
       this.getList();
     },
     add(index) {

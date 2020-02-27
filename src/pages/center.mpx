@@ -35,7 +35,12 @@
       avatarUrl: ''
     },
     onLoad () {
-
+      if (wx.getStorageSync('nickname')) {
+        this.setData({
+          nickName: wx.getStorageSync('nickname'),
+          avatarUrl: wx.getStorageSync('avatarurl'),
+        })
+      }
     },
     getUserInfo: async function (res) {
       console.log(res)
@@ -43,7 +48,7 @@
         nickName: res.detail.userInfo.nickName,
         avatarUrl: res.detail.userInfo.avatarUrl,
       })
-      if (!wx.setStorageSync('nickname')) {
+      if (!wx.getStorageSync('nickname')) {
         wx.setStorageSync('nickname', res.detail.userInfo.nickName)
         wx.setStorageSync('avatarurl', res.detail.userInfo.avatarUrl)
         const json = await wxRequest(`${wx.url}/wx/user/api/login`, {

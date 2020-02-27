@@ -1,0 +1,22 @@
+<template>
+<view></view>
+</template>
+<script>
+import { createPage } from '@mpxjs/core'
+import wxRequest from '../utils/request'
+createPage({
+  onShow() {
+    setTimeout(function() {
+      wx.switchTab({url: 'index'})
+    }, 1500);
+  }
+})  
+</script>
+<style lang="less">
+page {
+  background-color: #000;
+  background-image: url('../assets/image/open.jpg');
+  background-repeat:no-repeat;
+  background-size: cover;
+}
+</style>
