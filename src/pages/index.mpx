@@ -1,14 +1,16 @@
 <template>
 <view>
-  <nav-bar title="ACL"  back="{{false}}" />
-  <navigator url="./goods?id={{item.id}}" class="item" wx:for="{{list}}" wx:key="index">
-    <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/pic@3x.png" mode="aspectFill" class="pic" />
-    <view class="content">
-      <view class="title mb-8">{{item.name}}</view>
-      <view class="text mb-8">人均 110元/人</view>
-      <view class="text">营业时间：17:00 ～ 02:00</view>
-    </view>
-  </navigator>
+  <!-- <nav-bar title="ACL"  back="{{false}}" /> -->
+  <image class="logo" src="../assets/image/NJ.png" style="margin: {{statusBarHeight}}px 30rpx 58rpx" />
+  <view class="list">
+    <navigator url="./goods?id={{item.id}}&openTime={{item.openTime}}&closeTime={{item.closeTime}}" class="item" wx:for="{{list}}" wx:key="index">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/pic@3x.png" mode="aspectFill" class="pic" />
+      <view class="content">
+        <view class="title mb-8">{{item.name}}</view>
+        <view class="text">{{item.openTime}} ～ {{item.closeTime}}</view>
+      </view>
+    </navigator>
+  </view>
 </view>
 </template>
 
@@ -18,7 +20,8 @@
   createPage({
     data: {
       list: [],
-      page: 1
+      page: 1,
+      statusBarHeight: wx.getSystemInfoSync()['statusBarHeight']
     },
     onLoad () {
       this.getList()
@@ -43,40 +46,60 @@ page {
   box-sizing: border-box;
   padding: 32rpx;
 }
-.item {
+.logo {
+  width: 106rpx;
+  height: 84rpx;
+}
+.list {
   box-sizing: border-box;
-  width: 100%;
-  height:516rpx;
-  background:rgba(0,0,0,1);
-  border-radius:16rpx;
-  border:2px solid rgba(183,183,183,1);
-  margin-bottom: 32rpx;
-  .pic {
+  display: flex;
+  flex-wrap: wrap;
+  .item {
+    position: relative;
+    flex: 0 0 328rpx;
+    margin-right: 28rpx;
     box-sizing: border-box;
     width: 100%;
-    height:324rpx;
+    height:484rpx;
     background:rgba(0,0,0,1);
     border-radius:16rpx;
-  }
-  .content {
-    box-sizing: border-box;
-    padding: 32rpx;
-    .title {
-      height: 44rpx;
-      font-size:32rpx;
-      font-family:PingFangSC-Medium,PingFang SC;
-      font-weight:500;
-      color:rgba(255,255,255,1);
-      line-height:44rpx;
+    border:2rpx solid rgba(255,255,255,0.29);
+    margin-bottom: 28rpx;
+    &:nth-child(2n) {
+      margin-right: 0rpx;
     }
-    .text {
-      height:34rpx;
-      font-size:24rpx;
-      font-family:PingFang-SC-Medium,PingFang-SC;
-      font-weight:500;
-      color:rgba(255,255,255,1);
-      line-height:34rpx;
+    .pic {
+      box-sizing: border-box;
+      width: 100%;
+      height:480rpx;
+      background:rgba(0,0,0,1);
+      border-radius:16rpx;
+    }
+    .content {
+      box-sizing: border-box;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      padding: 24rpx;
+      background:rgba(0,0,0,1);
+      border-radius:0px 0px 16rpx 16rpx;
+      opacity:0.79;
+      .title {
+        height:40rpx;
+        font-size:28rpx;
+        font-weight:600;
+        color:rgba(255,255,255,1);
+        line-height:40rpx;
+      }
+      .text {
+        height:34rpx;
+        font-size:24rpx;
+        font-weight:500;
+        color:rgba(255,255,255,1);
+        line-height:34rpx;
+      }
     }
   }
 }
+
 </style>

@@ -10,12 +10,16 @@
           <view class="num" wx:if="{{goodsNumber > 0}}">{{goodsNumber}}</view>
         </view>
         <view class="price highlight" >￥{{goodsPrice}}</view>
-        <view class="desc">满200起送</view>
+        <view class="desc" wx:if="{{openShop}}">满200起送</view>
+        <view class="desc" wx:if="{{!openShop}}">店铺休息中</view>
       </view>
       <view class="content-right">
         <!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="pay"> -->
-          <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
+          <button wx:if="{{openShop}}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
           确认订单
+          </button>
+          <button wx:if="{{!openShop}}" bindtap="showClose" class="close">
+          休息中...
           </button>
         <!-- </button> -->
       </view>
@@ -46,7 +50,6 @@
                 <image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
               </div>
             </view>
-            
           </view>
         </view>
       </view>
@@ -67,6 +70,10 @@
         type: String,
         value: ''
       },
+      openShop: {
+        type: Boolean,
+        value: true
+      }
     },
     data:{
       selectFoods: ['冰茶', '冰茶', '冰茶'],
@@ -96,6 +103,9 @@
       }
     },
     methods: {
+      showClose() {
+        wx.showToast({title: '店铺休息中...，请在营业时间下单', icon: 'none'})
+      },
       add(index) {
         this.foodList[this.brandId][index].count =  this.foodList[this.brandId][index].count + 1
         store.commit('setMember', {list: this.foodList})
@@ -249,6 +259,29 @@
         width:200rpx;
         height:72rpx;
         background:rgba(202,115,39,1);
+        border-radius:40rpx;
+        opacity:0.97;
+        color: #FFF;
+        font-size:24rpx;
+        font-weight:500;
+        &.not-enough {
+          background: #2b333b;
+        }
+        &.enough {
+          background: #00b43c;
+          color: #fff;
+        }
+      }
+      .close {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: -36rpx;
+        right: 34rpx;
+        width:200rpx;
+        height:72rpx;
+        background:#AAA;
         border-radius:40rpx;
         opacity:0.97;
         color: #FFF;
