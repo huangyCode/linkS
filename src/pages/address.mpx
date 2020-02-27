@@ -18,7 +18,7 @@
      </picker>
     详细地址
     <input name="detailAddress" class="phone" value="{{detailAddress}}" />
-    <view class="def" bindtap="changeDefalut()"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{isDefault==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 设为默认1地址</view>
+    <view class="def" bindtap="changeDefalut()"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{isDefault==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 设为默认地址</view>
   </view>
   <!-- <view class="box" wx:if="{{select}}">
     <view class="table">
