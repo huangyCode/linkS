@@ -1,7 +1,7 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <navigator url="addressList" class="addBtn" wx:if="{{ addressList.length == 0 }}">
+  <navigator url="addressList?from=order" class="addBtn" wx:if="{{ addressList.length == 0 }}">
     <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
     添加收获地址
   </navigator>
@@ -91,6 +91,8 @@
         });
         this.setData({goodsPrice: Number(price).toFixed(2), brandId: options.brandId})
       }
+    },
+    onShow() {
       this.getaddressList()
     },
     onChange(e) {
@@ -105,7 +107,9 @@
       })
       if (json.returnCode == 'SUCCESS') {
         this.setData({addressList: json.returnData})
-        store.commit('setAddress', {address: json.returnData.filter(item => item.isDefault == 1)[0]})
+        if (!this.address.id) {
+          store.commit('setAddress', {address: json.returnData.filter(item => item.isDefault == 1)[0]})
+        }
       }
     },
     pay: async function() {

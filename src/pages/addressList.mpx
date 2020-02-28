@@ -1,10 +1,10 @@
 <template>
 <view>
   <nav-bar title="ACL" />
-  <view class="box" bindtap="handleClick(item)" wx:for="{{list}}" wx:key="index">
+  <view class="box" catchtap="handleClick(item)" wx:for="{{list}}" wx:key="index">
     <view class="table">
       <view class="row">
-        <view class="cell" bindtap="selectDefault(item)">
+        <view class="cell" catchtap="selectDefault(item)">
           <image class="select" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{item.isDefault == 1 ? 'xuanzhong' :'weixuanzhong'}}@3x.png" />
         </view>
         <view class="cell">
@@ -15,8 +15,8 @@
             <text style="margin-right: 32rpx">{{item.contactUser}}</text> {{item.phone}}
           </view>
         </view>
-        <view class="cell" style="width: 40rpx"><image bindtap="edit(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
-        <view class="cell" style="width: 40rpx"><image bindtap="del(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
+        <view class="cell" style="width: 40rpx"><image catchtap="edit(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
+        <view class="cell" style="width: 40rpx"><image catchtap="del(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
       </view>
     </view>
   </view>  
