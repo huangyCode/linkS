@@ -103,9 +103,12 @@
       this.brandId = options.id
       const myDate = new Date();
       const day = `${myDate.getFullYear()}-${myDate.getMonth()+1}-${myDate.getDate()}`
-      const time = new Date(`${day} ${myDate.getHours()}:${myDate.getMinutes()}:${myDate.getSeconds()}`).valueOf()
+      const hms = `${myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours()}:${myDate.getMinutes() < 10 ? "0" + myDate.getMinutes() : myDate.getMinutes()}:${myDate.getSeconds() < 10 ? "0" + myDate.getSeconds() : myDate.getSeconds()}`
+      const time = new Date(`${day} ${hms}`).valueOf()
       const beginDate = new Date(`${day} ${options.openTime}`).valueOf();
       const endDate = new Date(`${day} ${options.closeTime}`).valueOf();
+      console.log(`${day} ${hms}`, `${day} ${options.openTime}`, `${day} ${options.closeTime}`) 
+      console.log(time, beginDate, endDate)
       if (time >= beginDate && time <= endDate) {
         this.setData({openShop: true})
       } else {
