@@ -4,14 +4,14 @@
   <view class="box">
     联系人
     <view class="name">
-      <input name="contactUser" class="input" />
+      <input name="contactUser" value="{{contactUser}}"  class="input" />
       <view class="sex">
         <view bindtap="changeSex(1)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 先生</view>
         <view bindtap="changeSex(2)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==2 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 女士</view>
       </view>
     </view>
     电话
-    <input name="phone" class="phone" type="number" />
+    <input name="phone" value="{{phone}}"  class="phone" type="number" />
     所在地区
     <picker name="region" mode="region" bindchange="bindRegionChange">
       <input class="phone" value="{{region}}" disabled />
@@ -55,9 +55,12 @@
       select: undefined,
       longitude: '',
       latitude: '',
-      isDefault: 1
+      isDefault: 1,
+      contactUser: '',
+      phone: '',
+      detailAddress: '',
     },
-    onLoad() {
+    onLoad(options) {
       const that = this
       wx.getLocation({
         type: 'wgs84',
@@ -68,6 +71,30 @@
           }, ()=> {})
         }
       })
+      this.id = options.id
+      if (options.id) {
+        this.getInfo()
+      }
+     
+    },
+    getInfo: async function() {
+      const json = await wxRequest(`${wx.url}/wx/user/api/detailAddr`, {
+        method: 'FORM',
+        query: {
+          userId:  wx.getStorageSync('userid'),
+          id: this.id
+        }
+      })
+       if (json.returnCode == 'SUCCESS') {
+         this.setData({
+           contactUser: json.returnData.contactUser,
+           phone: json.returnData.phone,
+           region: `${json.returnData.province},${json.returnData.city},${json.returnData.area}`,
+           sex: json.returnData.gender,
+           detailAddress: json.returnData.detailAddress,
+           isDefault: json.returnData.isDefault
+         })
+      } 
     },
     changeDefalut() {
       this.setData({isDefault: this.isDefault == 1? 0: 1})
@@ -116,23 +143,45 @@
         wx.showToast({title: '请填写详细地址', icon: 'none'})
         return
       }
-      const json = await wxRequest(`${wx.url}/wx/user/api/saveAddr`, {
-        method: 'FORM',
-        query: {
-          userId:  wx.getStorageSync('userid'),
-          gender: this.sex,
-          ...e.detail.value,
-          province: region[0],
-          city: region[1],
-          area: region[2],
-          isDefault: this.isDefault
+      if (this.id) {
+        const json = await wxRequest(`${wx.url}/wx/user/api/updateAddr`, {
+          method: 'FORM',
+          query: {
+            id: this.id,
+            userId:  wx.getStorageSync('userid'),
+            gender: this.sex,
+            ...e.detail.value,
+            province: region[0],
+            city: region[1],
+            area: region[2],
+            isDefault: this.isDefault
+          }
+        })
+        if (json.returnCode == 'SUCCESS') {
+          wx.navigateBack()
+        } else {
+          wx.showToast({title: json.returnMsg, icon: 'none'})
         }
-      })
-      if (json.returnCode == 'SUCCESS') {
-         wx.navigateBack()
       } else {
-         wx.showToast({title: json.returnMsg, icon: 'none'})
+        const json = await wxRequest(`${wx.url}/wx/user/api/saveAddr`, {
+          method: 'FORM',
+          query: {
+            userId:  wx.getStorageSync('userid'),
+            gender: this.sex,
+            ...e.detail.value,
+            province: region[0],
+            city: region[1],
+            area: region[2],
+            isDefault: this.isDefault
+          }
+        })
+        if (json.returnCode == 'SUCCESS') {
+          wx.navigateBack()
+        } else {
+          wx.showToast({title: json.returnMsg, icon: 'none'})
+        }
       }
+     
      
     }
   })

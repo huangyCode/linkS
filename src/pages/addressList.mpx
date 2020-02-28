@@ -89,6 +89,9 @@
       if (this.from == 'order') {
         store.commit('setAddress', {address: item})
         wx.navigateBack()
+      } else {
+        console.log(123)
+        wx.navigateTo({url: `address?id=${item.id}`})
       }
     },
     getList: async function() {

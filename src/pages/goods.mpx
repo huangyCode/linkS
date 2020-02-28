@@ -103,14 +103,12 @@
       this.brandId = options.id
       const myDate = new Date();
       const day = `${myDate.getFullYear()}-${myDate.getMonth()+1}-${myDate.getDate()}`
-      const time = new Date(`${day} 03:${myDate.getMinutes()}:${myDate.getSeconds()}`).valueOf()
+      const time = new Date(`${day} ${myDate.getHours()}:${myDate.getMinutes()}:${myDate.getSeconds()}`).valueOf()
       const beginDate = new Date(`${day} ${options.openTime}`).valueOf();
       const endDate = new Date(`${day} ${options.closeTime}`).valueOf();
       if (time >= beginDate && time <= endDate) {
-        console.log('open')
         this.setData({openShop: true})
       } else {
-        console.log('close')
         this.setData({openShop: false})
       }
       this.setData({id: options.id, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 70})
