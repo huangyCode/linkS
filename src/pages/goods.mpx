@@ -104,10 +104,10 @@
       const myDate = new Date();
       const day = `${myDate.getFullYear()}/${myDate.getMonth()+1}/${myDate.getDate()}`
       const hms = `${myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours()}:${myDate.getMinutes() < 10 ? "0" + myDate.getMinutes() : myDate.getMinutes()}:${myDate.getSeconds() < 10 ? "0" + myDate.getSeconds() : myDate.getSeconds()}`
-      const time = new Date(`${day} ${hms}`).valueOf()
-      const beginDate = new Date(`${day} ${options.openTime}`).valueOf();
-      const endDate = new Date(`${day} ${options.closeTime}`).valueOf();
-      console.log(`${day} ${hms}`, `${day} ${options.openTime}`, `${day} ${options.closeTime}`) 
+      const time = new Date(`${day} ${hms}`).getTime()
+      const beginDate = new Date(`${day} ${options.openTime}`).getTime();
+      const endDate = new Date(`${day} ${options.closeTime}`).getTime();
+      console.log(`${day} ${hms}`, `${day} ${options.openTime}`, `${day} ${options.closeTime}`)
       console.log(time, beginDate, endDate)
       if (time >= beginDate && time <= endDate) {
         this.setData({openShop: true})
@@ -164,7 +164,7 @@
           iv: params.detail.iv
         }
       })
-      
+
     },
     getUserInfo: async function (res) {
       const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
@@ -180,11 +180,11 @@
     //   const query = wx.createSelectorQuery()    // 创建节点查询器 query
     //   this.goods.map((item, index)=> {
     //     console.log()
-    //     query.select(`#id${index}`).boundingClientRect() 
-    //   })            
+    //     query.select(`#id${index}`).boundingClientRect()
+    //   })
     //   // query.selectViewport().scrollOffset()                 // 这段代码的意思是获取页面滑动位置的查询请求
     //   query.exec((res) => {
-    //     console.log(res) 
+    //     console.log(res)
     //     let height = 0;
     //     this.listHeight.push(height);
     //     for (let i = 0; i < res.length; i++) {
@@ -192,7 +192,7 @@
     //       height += item.height;
     //       this.listHeight.push(height);
     //     }
-    //     this.setData({listHeight: this.listHeight})                                 
+    //     this.setData({listHeight: this.listHeight})
     //   })
     // }
   })
@@ -238,9 +238,9 @@
         .text {
           border: none;
         }
-      }    
-    }  
-  }     
+      }
+    }
+  }
 }
 
 
@@ -318,7 +318,7 @@
       }
     }
   }
-}    
+}
 </style>
 <script type="application/json">
   {
@@ -328,4 +328,3 @@
   }
 </script>
 
-   
