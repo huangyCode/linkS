@@ -64,10 +64,10 @@
     </view>
   </view> -->
   <view class="box">
-    <view class="header">
+    <view class="header" wx:if="{{order.desc}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhifufangshi@3x.png" /> 订单备注
     </view>
-    <view class="beak">{{order.desc}}</view>
+    <view class="beak" wx:if="{{order.desc}}">{{order.desc}}</view>
     <view class="table">
       <view class="row">
         <view class="cell">下单时间</view>

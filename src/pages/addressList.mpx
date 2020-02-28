@@ -15,8 +15,8 @@
             <text style="margin-right: 32rpx">{{item.contactUser}}</text> {{item.phone}}
           </view>
         </view>
-        <view class="cell"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
-        <view class="cell"><image bindtap="del(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
+        <view class="cell" style="width: 40rpx"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
+        <view class="cell" style="width: 40rpx"><image bindtap="del(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
       </view>
     </view>
   </view>  
@@ -147,7 +147,7 @@ page {
         height:32rpx;
       }
       .action {
-        padding-left: 26rpx;
+        padding: 0 26rpx;
         width:32rpx;
         height:32rpx;
         border-left: 1px solid rgba(255,255,255,0.3);
