@@ -127,6 +127,7 @@
     },
     save: async function(e) {
       const {contactUser, phone, region, detailAddress} = e.detail.value
+      console.log(region)
       if (!contactUser) {
         wx.showToast({title: '请填写联系人', icon: 'none'})
         return
@@ -135,6 +136,10 @@
         wx.showToast({title: '请填写联系电话', icon: 'none'})
         return
       }
+      if (!/^1[3456789]\d{9}$/.test(phone)) {
+        wx.showToast({title: '请填写正确手机号', icon: 'none'})
+        return
+      } 
       if (!region && region.length < 3) {
         wx.showToast({title: '请选择地区', icon: 'none'})
         return

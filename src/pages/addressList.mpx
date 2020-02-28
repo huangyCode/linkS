@@ -15,7 +15,7 @@
             <text style="margin-right: 32rpx">{{item.contactUser}}</text> {{item.phone}}
           </view>
         </view>
-        <view class="cell" style="width: 40rpx"><image class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
+        <view class="cell" style="width: 40rpx"><image bindtap="edit(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_xiugai@3x.png" /></view>
         <view class="cell" style="width: 40rpx"><image bindtap="del(item)" class="action" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_shanchubai@3x.png" /></view>
       </view>
     </view>
@@ -60,6 +60,9 @@
     onShow() {
       this.getList()
     },
+    edit(item) {
+      wx.navigateTo({url: `address?id=${item.id}`})
+    },
     del: async function(item) {
       const json = await wxRequest(`${wx.url}/wx/user/api/deleteAddr`, {
         method: 'FORM',
@@ -89,9 +92,6 @@
       if (this.from == 'order') {
         store.commit('setAddress', {address: item})
         wx.navigateBack()
-      } else {
-        console.log(123)
-        wx.navigateTo({url: `address?id=${item.id}`})
       }
     },
     getList: async function() {
