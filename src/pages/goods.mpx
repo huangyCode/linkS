@@ -111,6 +111,7 @@
       } else {
         this.setData({openShop: false})
       }
+      store.commit('setShopName', {name: options.name})
       this.setData({id: options.id, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 70})
       this.getList();
     },

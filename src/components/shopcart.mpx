@@ -15,8 +15,11 @@
       </view>
       <view class="content-right">
         <!-- <button open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="pay"> -->
-          <button wx:if="{{openShop && goodsPrice >=deliveryThreshold  }}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
-          确认订单
+          <button wx:if="{{openShop && goodsPrice >=deliveryThreshold && !phone }}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber" class="pay">
+            确认订单
+          </button>
+          <button wx:if="{{openShop && goodsPrice >=deliveryThreshold && phone }}" bind:tap="getPhoneNumber" class="pay">
+            确认订单
           </button>
           <button wx:if="{{openShop && goodsPrice  < deliveryThreshold}}"  class="close">
             满{{deliveryThreshold}}起送
@@ -84,6 +87,7 @@ import { values } from 'mobx'
       }
     },
     data:{
+      phone:  wx.getStorageSync('phone'),
       selectFoods: ['冰茶', '冰茶', '冰茶'],
       listShow: false,
       statusBarHeight: getApp().globalData.statusBarHeight

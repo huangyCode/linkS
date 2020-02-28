@@ -18,7 +18,7 @@
   </navigator>
   <view class="box">
     <view class="header">
-      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dianpu@3x.png" /> ACL南通巷店
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dianpu@3x.png" /> {{shopName}}
     </view>
   </view>
   <view class="box">
@@ -80,8 +80,7 @@
       brandId: ''
     },
     computed: {
-      ...store.mapState(['foodList','address']),
-      
+      ...store.mapState(['foodList','address', 'shopName']),
     },
     onLoad(options) {
       console.log(options)
@@ -117,7 +116,7 @@
           // productTypeId: item.productTypeId,
           // productType: item.productType,
           productName: item.name,
-          price: item.price,
+          price: Number(item.price * item.count).toFixed(2),
           num: item.count
         })
       })

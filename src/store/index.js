@@ -2,9 +2,13 @@ import { createStore } from '@mpxjs/core'
 const store = createStore({
   state: {
     foodList: {},
-    address: {}
+    address: {},
+    shopName: ''
   },
   mutations: {
+    setShopName(state, {name}) {
+      state.shopName = name
+    },
     setMember(state, { list }) {
       state.foodList = {...list}
     },
