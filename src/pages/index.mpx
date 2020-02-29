@@ -4,7 +4,7 @@
   <image class="logo" src="../assets/image/NJ.png" style="margin: {{statusBarHeight}}px 30rpx 58rpx" />
   <view class="list">
     <navigator url="./goods?id={{item.id}}&name={{item.name}}&deliveryThreshold={{item.deliveryThreshold}}&openTime={{item.openTime}}&closeTime={{item.closeTime}}" class="item" wx:for="{{list}}" wx:key="index">
-      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/pic@3x.png" mode="aspectFill" class="pic" />
+      <image src="{{item.picUrl}}" mode="aspectFill" class="pic" />
       <view class="content">
         <view class="title mb-8">{{item.name}}</view>
         <view class="text">{{item.openTime}} ～ {{item.closeTime}}</view>

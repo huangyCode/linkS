@@ -8,7 +8,7 @@ createPage({
   onShow() {
     setTimeout(function() {
       wx.switchTab({url: 'index'})
-    }, 2000);
+    }, 2500);
   }
 })  
 </script>
@@ -17,6 +17,6 @@ page {
   background-color: #000;
   background-image: url('../assets/image/open.jpg');
   background-repeat:no-repeat;
-  background-size:100% 100%;
+  background-size:100% auto;
 }
 </style>
