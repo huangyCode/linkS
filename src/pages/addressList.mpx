@@ -64,17 +64,28 @@
       wx.navigateTo({url: `address?id=${item.id}`})
     },
     del: async function(item) {
-      const json = await wxRequest(`${wx.url}/wx/user/api/deleteAddr`, {
-        method: 'FORM',
-        query: {
-          id: item.id
+      const that = this
+      wx.showModal({
+        title: '提示',
+        content: '是否删除该地址',
+        success: async function(res) {
+          if (res.confirm) {
+            const json = await wxRequest(`${wx.url}/wx/user/api/deleteAddr`, {
+              method: 'FORM',
+              query: {
+                id: item.id
+              }
+            })
+            if (json.returnCode == 'SUCCESS') {
+              that.getList()
+            } else {
+              wx.showToast({title: json.returnMsg, icon: 'none'})
+            }
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
         }
       })
-      if (json.returnCode == 'SUCCESS') {
-        this.getList()
-      } else {
-        wx.showToast({title: json.returnMsg, icon: 'none'})
-      }
     },
     selectDefault: async function(item) {
       const json = await wxRequest(`${wx.url}/wx/user/api/updateAddr`, {

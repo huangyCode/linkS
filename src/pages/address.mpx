@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
@@ -72,6 +73,7 @@
         }
       })
       this.id = options.id
+      this.from = options.from
       if (options.id) {
         this.getInfo()
       }
@@ -181,6 +183,9 @@
           }
         })
         if (json.returnCode == 'SUCCESS') {
+          if (this.from == 'order') {
+            store.commit('setAddress', {address: json.returnData })
+          }
           wx.navigateBack()
         } else {
           wx.showToast({title: json.returnMsg, icon: 'none'})

@@ -30,7 +30,7 @@ const wxRequest = async(url,params = {}) => {
           showCancel: false,
           content: '网络异常, 请求超时！',
           success: function () {
-            wx.clearStorage()
+            // wx.clearStorage()
             // wx.redirectTo({url: '/pages/login/login'})
           }
         })
