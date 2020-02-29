@@ -64,7 +64,7 @@ page {
   background-color: #000;
   background-image: url('./assets/image/BG.png');
   background-repeat:no-repeat;
-  background-size: cover;
+  background-size:100% auto;
 }
 .mb-8 {
   margin-bottom: 8rpx
