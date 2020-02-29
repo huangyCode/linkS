@@ -61,7 +61,7 @@
       </view>
     </view>
   </view>
-  <view class="list-mask" wx:if="{{listShow}}"></view>
+  <view class="list-mask" bind:tap="showList" wx:if="{{listShow}}"></view>
 </view>
 </template>
 
