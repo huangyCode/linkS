@@ -58,9 +58,9 @@
         })
         if (json.returnCode == 'SUCCESS' ) {
           wx.setStorageSync('avatarurl', res.detail.userInfo.avatarUrl)
-          wx.setStorageSync('userid', json2.returnData.id)
-          wx.setStorageSync('nikename', json2.returnData.nikeName)
-          wx.setStorageSync('phone', json2.returnData.phone)
+          wx.setStorageSync('userid', json.returnData.id)
+          wx.setStorageSync('nikename', json.returnData.nikeName)
+          wx.setStorageSync('phone', json.returnData.phone)
         } else {
           wx.showToast({title: '登录异常', icon: 'none'})
         }

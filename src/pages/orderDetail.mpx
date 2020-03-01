@@ -2,10 +2,10 @@
 <view>
   <nav-bar title="ACL" />
   <view class="addBtn">
-    <view class="no">NO.{{address.orderCode}}</view>
+    <view class="no">NO.{{order.code2}}</view>
     <view class="type" wx:if="{{order.status == 0}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
-      等待商家确认...
+      {{ order.payStatus == 0 ? '未支付' : '等待商家确认' }}
     </view>
     <view class="type" wx:if="{{order.status == 1}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />
@@ -73,7 +73,7 @@
         <view class="cell">下单时间</view>
         <view class="cell">2020-02-02 20:20</view>
       </view>
-      <view class="row">
+      <view class="row" x:if="{{order.payStatus != 0}}">
         <view class="cell">支付方式</view>
         <view class="cell">微信支付</view>
       </view>
@@ -88,10 +88,10 @@
     </view>
   </view>
   <view class="shopcart" wx:if="{{order.status == 0}}">
-    <view class="content" bind:tap="cancel">
+    <view class="content" bind:tap="cancel" wx:if="{{order.payStatus != 0}}">
       取消订单
     </view>
-    <view class="content" bind:tap="cancel" wx:if="{{order.payStatus == 0}}">
+    <view class="content" bind:tap="pay" wx:if="{{order.payStatus == 0}}">
       去支付
     </view>
   </view>  
@@ -110,10 +110,14 @@
     onLoad(options) {
       this.id = options.id
     },
+    onPullDownRefresh() {
+      this.getInfo()
+    },
     onShow() {
       this.getInfo()
     },
     getInfo: async function() {
+      wx.showLoading({title: '加载中'})
       const json = await wxRequest(`${wx.url}/wx/order/api/detail`, {
         method: 'FORM',
         query: {
@@ -125,6 +129,7 @@
           address: json.returnData.address,
           order: json.returnData.order,
         })
+        wx.hideLoading()
       }
     },
     cancel: async function() {
@@ -139,8 +144,55 @@
       } else {
         wx.showToast({title: json.returnData.msg, icon: 'none'})
       }
+    },
+    pay: async function() {
+      // const obj = {
+      //   openId: wx.getStorageSync('openid'),
+      //   userId: wx.getStorageSync('userid'),
+      //   brandId: Number(this.brandId),
+      //   addressId: this.address.id,
+      //   desc: this.desc,
+      //   amount: this.goodsPrice,
+      //   proListStr:  JSON.stringify(this.order.productList)
+      // }
+      // const json = await wxRequest(`${wx.url}/wx/order/api/makeOrder`, {
+      //   method: 'FORM',
+      //   query: obj
+      // })
+      // if (json.returnCode == 'SUCCESS') {
+      //   if (json.returnData.status == 200) {
+      //     wx.requestPayment({
+      //       timeStamp: json.returnData.data.timeStamp,
+      //       nonceStr: json.returnData.data.nonceStr,
+      //       package: json.returnData.data.prepay_id,
+      //       signType: json.returnData.data.signType,
+      //       paySign: json.returnData.data.paySign,
+      //       success (res) {
+      //         wx.hideLoading()
+      //         wx.redirectTo({url: 'orderList'})
+      //       },
+      //       fail (res) {
+      //         console.log(res)
+      //          wx.hideLoading()
+      //         wx.redirectTo({url: 'orderList'})
+      //       }
+      //     })
+      //   } else {
+      //      wx.hideLoading()
+      //     wx.showToast({title: json.returnData.msg, icon: 'none'})
+      //   }
+       
+      // } else {
+      //    wx.hideLoading()
+      //   wx.showToast({title: json.returnMsg, icon: 'none'})
+      // }
     }
   })
+</script>
+<script type="application/json">
+{
+  "enablePullDownRefresh": true
+}
 </script>
 <style lang="less">
 page {

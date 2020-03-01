@@ -114,6 +114,10 @@
     },
     pay: async function() {
       const arr = []
+      if (!this.address.id) {
+        wx.showToast({title: '请先添加地址', icon: 'none'})
+        return
+      }
       this.foodList[this.brandId].forEach(item => {
         arr.push({
           productId: item.id,
@@ -133,13 +137,13 @@
         amount: this.goodsPrice,
         proListStr:  JSON.stringify(arr)
       }
+      wx.showLoading({title: '加载中'})
       const json = await wxRequest(`${wx.url}/wx/order/api/makeOrder`, {
         method: 'FORM',
         query: obj
       })
       if (json.returnCode == 'SUCCESS') {
         if (json.returnData.status == 200) {
-          console.log(json.returnData.data)
           wx.requestPayment({
             timeStamp: json.returnData.data.timeStamp,
             nonceStr: json.returnData.data.nonceStr,
@@ -147,18 +151,22 @@
             signType: json.returnData.data.signType,
             paySign: json.returnData.data.paySign,
             success (res) {
+              wx.hideLoading()
               wx.redirectTo({url: 'orderList'})
             },
             fail (res) {
               console.log(res)
+               wx.hideLoading()
               wx.redirectTo({url: 'orderList'})
             }
           })
         } else {
+           wx.hideLoading()
           wx.showToast({title: json.returnData.msg, icon: 'none'})
         }
        
       } else {
+         wx.hideLoading()
         wx.showToast({title: json.returnMsg, icon: 'none'})
       }
     }

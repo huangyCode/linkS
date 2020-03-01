@@ -8,11 +8,11 @@
     </view>
     <view class="order">
       <view class="no">订单编号</view>
-      <text>{{item.code}}</text>
+      <text>{{item.code2}}</text>
     </view>
     <view class="type" wx:if="{{item.status == 0}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
-      等待商家确认...
+      {{ item.payStatus == 0 ? '未支付' : '等待商家确认...' }}
     </view>
     <view class="type" wx:if="{{item.status == 1}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_wancheng@3x.png" />
@@ -70,10 +70,24 @@
       list: [],
       page: 1
     },
-    onShow() {
+    onLoad() {
       this.getList()
     },
+    onPullDownRefresh() {
+       this.setData({
+        list: [],
+        page: 1
+      })
+      this.getList()
+    },
+    scrollToLower: function (e) {
+      this.setData({
+        page: this.page + 1
+      })
+      this.getList();
+    },
     getList: async function() {
+      wx.showLoading({title: '加载中'})
       const json = await wxRequest(`${wx.url}/wx/order/api/list`, {
         method: 'FORM',
         query: {
@@ -82,10 +96,16 @@
         }
       })
       if (json.returnCode == 'SUCCESS') {
-        this.setData({list: json.returnData})
+        this.setData({list: this.list.concat(json.returnData)})
       }
+      wx.hideLoading()
     },
   })
+</script>
+<script type="application/json">
+{
+  "enablePullDownRefresh": true
+}
 </script>
 <style lang="less">
 page {
