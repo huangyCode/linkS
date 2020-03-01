@@ -91,6 +91,9 @@
     <view class="content" bind:tap="cancel">
       取消订单
     </view>
+    <view class="content" bind:tap="cancel" wx:if="{{order.payStatus == 0}}">
+      去支付
+    </view>
   </view>  
 </view>  
 </template>
@@ -106,6 +109,8 @@
     },
     onLoad(options) {
       this.id = options.id
+    },
+    onShow() {
       this.getInfo()
     },
     getInfo: async function() {

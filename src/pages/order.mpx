@@ -151,7 +151,7 @@
             },
             fail (res) {
               console.log(res)
-              // wx.redirectTo({url: 'orderList'})
+              wx.redirectTo({url: 'orderList'})
             }
           })
         } else {

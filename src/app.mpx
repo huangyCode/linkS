@@ -30,24 +30,28 @@
                   openId: json.returnData.openId,
                 }
               })
-              if (json.returnCode == 'SUCCESS') {
-                 wx.setStorageSync('userid', json2.returnData.id)
-                 wx.setStorageSync('nikename', json2.returnData.nikeName)
-                 wx.setStorageSync('phone', json2.returnData.phone)
+              if (json2.returnCode == 'SUCCESS' && json2.businessCode == 100) {
+                wx.setStorageSync('userid', json2.returnData.id)
+                wx.setStorageSync('nikename', json2.returnData.nikeName)
+                wx.setStorageSync('phone', json2.returnData.phone)
+              } else {
+                wx.clearStorageSync()
+                wx.setStorageSync('sessionkey', json.returnData.sessionKey)
+                wx.setStorageSync('openid', json.returnData.openId)
               }
-              wx.getUserInfo({
-                success: async function(res) {
-                  wx.setStorageSync('nickname', res.userInfo.nickName)
-                  wx.setStorageSync('avatarurl', res.userInfo.avatarUrl)
-                  const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
-                    method: 'FORM',
-                    query: {
-                      ...res.userInfo,
-                      openId: wx.getStorageSync('openid')
-                    }
-                  })
-                }
-              }) 
+              // wx.getUserInfo({
+              //   success: async function(res) {
+              //     wx.setStorageSync('nickname', res.userInfo.nickName)
+              //     wx.setStorageSync('avatarurl', res.userInfo.avatarUrl)
+              //     const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
+              //       method: 'FORM',
+              //       query: {
+              //         ...res.userInfo,
+              //         openId: wx.getStorageSync('openid')
+              //       }
+              //     })
+              //   }
+              // }) 
             }
           } else {
             console.log('登录失败！' + res.errMsg)
@@ -64,7 +68,7 @@ page {
   background-color: #000;
   background-image: url('./assets/image/BG.png');
   background-repeat:no-repeat;
-  background-size:100% auto;
+  background-size: cover;
 }
 .mb-8 {
   margin-bottom: 8rpx
@@ -102,12 +106,14 @@ page {
         {
           "pagePath": "pages/index",
           "iconPath": "./assets/image/tabbar/tabbar_home2@3x.png",
-          "selectedIconPath": "./assets/image/tabbar/tabbar_home@3x.png"
+          "selectedIconPath": "./assets/image/tabbar/tabbar_home@3x.png",
+          "text": "Home"
         },
         {
           "pagePath": "pages/center",
           "iconPath": "./assets/image/tabbar/tabbar_me2@3x.png",
-          "selectedIconPath": "./assets/image/tabbar/tabbar_me@3x.png"
+          "selectedIconPath": "./assets/image/tabbar/tabbar_me@3x.png",
+          "text": "Me"
         }
       ]
     },

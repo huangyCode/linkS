@@ -48,9 +48,7 @@
         nickName: res.detail.userInfo.nickName,
         avatarUrl: res.detail.userInfo.avatarUrl,
       })
-      if (!wx.getStorageSync('nickname')) {
-        wx.setStorageSync('nickname', res.detail.userInfo.nickName)
-        wx.setStorageSync('avatarurl', res.detail.userInfo.avatarUrl)
+      // if (!wx.getStorageSync('nickname')) {
         const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
           method: 'FORM',
           query: {
@@ -58,7 +56,15 @@
             openId: wx.getStorageSync('openid')
           }
         })
-      }
+        if (json.returnCode == 'SUCCESS' ) {
+          wx.setStorageSync('avatarurl', res.detail.userInfo.avatarUrl)
+          wx.setStorageSync('userid', json2.returnData.id)
+          wx.setStorageSync('nikename', json2.returnData.nikeName)
+          wx.setStorageSync('phone', json2.returnData.phone)
+        } else {
+          wx.showToast({title: '登录异常', icon: 'none'})
+        }
+      // }
     },
   })
 </script>

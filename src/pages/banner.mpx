@@ -17,6 +17,6 @@ page {
   background-color: #000;
   background-image: url('../assets/image/open.jpg');
   background-repeat:no-repeat;
-  background-size:100% auto;
+  background-size:100% 100%;
 }
 </style>

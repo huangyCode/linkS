@@ -64,6 +64,7 @@
 </template>
 
 <script>
+  import { addDays } from 'date-fns';
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
@@ -106,7 +107,11 @@
       const hms = `${myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours()}:${myDate.getMinutes() < 10 ? "0" + myDate.getMinutes() : myDate.getMinutes()}:${myDate.getSeconds() < 10 ? "0" + myDate.getSeconds() : myDate.getSeconds()}`
       const time = new Date(`${day} ${hms}`).getTime()
       const beginDate = new Date(`${day} ${options.openTime}`).getTime();
-      const endDate = new Date(`${day} ${options.closeTime}`).getTime();
+      let endDate = new Date(`${day} ${options.closeTime}`).getTime();
+      console.log(new Date(`${day} ${options.closeTime}`).getTime(), new Date(`${day} ${options.openTime}`).getTime())
+      if (new Date(`${day} ${options.closeTime}`).getTime() < new Date(`${day} ${options.openTime}`).getTime()) {
+        endDate = addDays(new Date(`${day} ${options.closeTime}`), 1).getTime();
+      }
       console.log(`${day} ${hms}`, `${day} ${options.openTime}`, `${day} ${options.closeTime}`)
       console.log(time, beginDate, endDate)
       if (time >= beginDate && time <= endDate) {
@@ -131,7 +136,10 @@
       this.setData({goods: this.goods})
     },
     getList: async function() {
-      const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{method: "FORM"})
+      const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{
+        method: "FORM",
+        query: { brandId: this.brandId }
+      })
       if (json.returnCode == 'SUCCESS') {
         this.setData({list: json.returnData}, ()=> {
           if (this.first == true) {

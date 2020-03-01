@@ -139,18 +139,29 @@ import { values } from 'mobx'
         if (wx.getStorageSync('phone')) {
           wx.navigateTo({url: `order?brandId=${this.brandId}`})        
         } else {
-          const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
-            method: 'FORM',
-            query: {
-              sessionKey: wx.getStorageSync('sessionkey'),
-              openId: wx.getStorageSync('openid'),
-              encryptedData: params.detail.encryptedData,
-              iv: params.detail.iv
+          if (wx.getStorageSync('userid')) {
+            const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
+              method: 'FORM',
+              query: {
+                sessionKey: wx.getStorageSync('sessionkey'),
+                openId: wx.getStorageSync('openid'),
+                encryptedData: params.detail.encryptedData,
+                iv: params.detail.iv
+              }
+            })
+            if (json.returnCode == 'SUCCESS') {
+              wx.setStorageSync('phone', json.returnData.phone)
+              wx.navigateTo({url: `order?brandId=${this.brandId}`})
             }
-          })
-          if (json.returnCode == 'SUCCESS') {
-            wx.setStorageSync('phone', json.returnData.phone)
-            wx.navigateTo({url: `order?brandId=${this.brandId}`})
+          } else {
+            wx.showModal({
+              title: '提示',
+              content: '请先登录',
+              showCancel: false,
+              success (res) {
+                wx.switchTab({url: 'center'})
+              }
+            })
           }
         }
       },
