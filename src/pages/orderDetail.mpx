@@ -46,11 +46,14 @@
     </view>
     <view class="table">
       <view class="row" wx:for="{{order.productList}}" wx:key="index">
-        <view class="cell">{{item.productName}}</view>
-        <view class="cell">x {{item.number}}</view>
-        <view class="cell">￥{{item.productPrice}}</view>
+        <view class="cell" style="color: #A0A0A0">{{item.productName}}</view>
+        <view class="cell" style="width:25%;color: #565656">x {{item.number}}</view>
+        <view class="cell" style="color:#A0A0A0;width:1%">￥{{item.productPrice}}</view>
       </view>
     </view>
+    <view style="text-align:right;color: #A0A0A0;padding: 24rpx 0rpx;font-size:24rpx;"  wx:if="{{order.amount}}"> 
+      <text style="color: #565656">合计</text>￥<text style="font-size: 40rpx">{{order.amount}}</text>
+    </view>  
   </view>
   <!-- <view class="box">
     <view class="header">
@@ -70,18 +73,18 @@
     <view class="beak" wx:if="{{order.desc}}">{{order.desc}}</view>
     <view class="table">
       <view class="row">
-        <view class="cell">下单时间</view>
+        <view class="cell" style="width: 20%">下单时间</view>
         <view class="cell">2020-02-02 20:20</view>
       </view>
-      <view class="row" x:if="{{order.payStatus != 0}}">
+      <view class="row" style="width: 20%" wx:if="{{order.payStatus != 0}}">
         <view class="cell">支付方式</view>
         <view class="cell">微信支付</view>
       </view>
-      <view class="row">
+      <view class="row" style="width: 20%">
         <view class="cell">商家品牌</view>
         <view class="cell">{{order.brandName}}</view>
       </view>
-      <view class="row">
+      <view class="row" style="width: 20%">
         <view class="cell">商家电话</view>
         <view class="cell">025-5226688</view>
       </view>
@@ -229,7 +232,7 @@ page {
   border-radius:18rpx;
   opacity:0.69;
   font-size:26rpx;
-  color: #FFF;
+  color: #A0A0A0;
   padding: 24rpx;
   margin-bottom: 32rpx;
   .header {
@@ -285,14 +288,14 @@ page {
     justify-content: space-between;
     align-items: center;
     font-size:28rpx;
-    color: #C2C2C2;
+    color: #A0A0A0;
     image {
       width:50rpx;
       height:50rpx;
     }
   }
   .info {
-    color:#C2C2C2;
+    color:#A0A0A0;
     height:40rpx;
     font-size:28rpx;
     line-height: 40rpx;
@@ -312,7 +315,7 @@ page {
     background:#151515;
     border-radius:32rpx 32rpx 0px 0px;
     font-size: 28rpx;
-    color: rgba(255, 255, 255, 1);
+    color: #A0A0A0;
   }
 }  
 </style>

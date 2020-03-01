@@ -129,7 +129,7 @@ page {
   background:rgba(202,115,39,1);
   border-radius:40rpx;
   opacity:0.97;
-  color: #FFFFFF;
+  color: #A0A0A0;
 }
 .box {
   box-sizing: border-box;
@@ -138,7 +138,7 @@ page {
   border-radius:18rpx;
   opacity:0.69;
   font-size:26rpx;
-  color: #FFF;
+  color: #A0A0A0;
   padding: 24rpx;
   margin-bottom: 32rpx;
   .title {
