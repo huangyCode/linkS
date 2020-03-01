@@ -28,8 +28,8 @@
     <view class="table">
       <view class="row" wx:for="{{foodList[brandId]}}" wx:key="index">
         <view class="cell">{{item.name}}</view>
-        <view class="cell">x {{item.count}}{{item.unit}}</view>
-        <view class="cell">￥{{item.price}}</view>
+        <view class="cell" style="25%">x {{item.count}}{{item.unit}}</view>
+        <view class="cell" style="1%">￥{{item.price}}</view>
       </view>
     </view>
   </view>

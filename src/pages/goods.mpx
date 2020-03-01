@@ -24,13 +24,13 @@
               <view class="name">{{item.name}}</view>
               <view class="desc">{{item.enName}}</view>
               <view class="price">
-                <text style="font-size:24rpx">￥</text>{{item.price}} 
-                <div class="cartcontrol-wrapper">
+                <view><text style="font-size:24rpx">￥</text>{{item.price}}</view>
+                <view class="cartcontrol-wrapper">
                    <view class="mc">
                   <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
                    <view class="mc"><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
                   <view class="mc"><image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
-                </div>
+                </view>
               </view>
             </view>
           </view>
@@ -230,7 +230,7 @@
     min-height: 100%;
     border-radius: 16rpx;
     border:4rpx solid;
-    border-image:linear-gradient(180deg, rgba(255,255,255,1), rgba(196,182,255,0)) 4 4;
+    border-image:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(196,182,255,0)) 4 4;
     .menu-item {
       display: table;
       width:152rpx;
@@ -239,7 +239,7 @@
       text-align: center;
       font-family:PingFang-SC-Medium,PingFang-SC;
       font-weight:500;
-      color:rgba(188,188,188,1);
+      color:#A0A0A0;
       font-size: 24rpx;
       display: -webkit-box;
       overflow: hidden;
@@ -257,13 +257,13 @@
         min-height: 108rpx;
       }
       .enName {
-        color:rgba(255,255,255,0.7);
+        color:#272727;
       }
       &.current {
         position: relative;
         color:rgba(0,0,0,1);
         z-index: 10;
-        background:rgba(188,188,188,1);
+        background:#BCBCBC;
         border-radius:16rpx;
         opacity:0.97;
         left: -14rpx;
@@ -273,7 +273,7 @@
           border: none;
         }
         .enName {
-         color:rgba(0,0,0,1);
+         color:#272727;
         }
       }
       .short {
