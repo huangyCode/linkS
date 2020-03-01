@@ -99,6 +99,7 @@
 </template>
 
 <script>
+  import utils from '../utils/utils'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
@@ -145,7 +146,7 @@
         wx.showToast({title: json.returnData.msg, icon: 'none'})
       }
     },
-    pay: async function() {
+    pay: utils.throttle(async function() {
       const json = await wxRequest(`${wx.url}/wx/order/api/payOrder`, {
         method: 'FORM',
         query: {orderId: this.id}
@@ -176,7 +177,7 @@
          wx.hideLoading()
         wx.showToast({title: json.returnMsg, icon: 'none'})
       }
-    }
+    }, 1500)
   })
 </script>
 <script type="application/json">

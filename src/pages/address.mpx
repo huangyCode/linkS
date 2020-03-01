@@ -127,7 +127,7 @@
         region: e.detail.value
       })
     },
-    save: async function(e) {
+    save: utils.throttle(async function(e) {
       const {contactUser, phone, region, detailAddress} = e.detail.value
       console.log(region)
       if (!contactUser) {
@@ -193,7 +193,7 @@
       }
      
      
-    }
+    }, 1500)
   })
 </script>
 <style lang="less">

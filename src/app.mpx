@@ -34,6 +34,7 @@
                 wx.setStorageSync('userid', json2.returnData.id)
                 wx.setStorageSync('nickname', json2.returnData.nickName)
                 wx.setStorageSync('phone', json2.returnData.phone)
+                wx.setStorageSync('avatarurl', json2.returnData.avatarUrl)
               } else {
                 wx.clearStorageSync()
                 wx.setStorageSync('sessionkey', json.returnData.sessionKey)

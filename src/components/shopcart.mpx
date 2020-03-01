@@ -134,16 +134,11 @@
         store.commit('clearMember')
       },
       getPhoneNumber: utils.throttle(function(params) {
-         console.log((new Date()).getSeconds())
           if (this.foodList[this.brandId].length == 0) {
             wx.showToast({title: '请选择商品', icon: 'none'})
             return
           }
           if (wx.getStorageSync('phone')) {
-            wx.showLoading({title: '加载中', mask: true})
-            setTimeout(function () {
-              wx.hideLoading()
-            }, 2000)
             wx.navigateTo({url: `order?brandId=${this.brandId}`})
           } else {
             if (wx.getStorageSync('userid')) {
@@ -174,7 +169,7 @@
               })
             }
           } 
-      }, 1000),
+      }, 1500),
       getUserInfo: async function (res) {
         const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
           method: 'FORM',

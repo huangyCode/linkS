@@ -67,6 +67,7 @@
 </template>
 
 <script>
+  import utils from '../utils/utils'
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
@@ -112,7 +113,7 @@
         }
       }
     },
-    pay: async function() {
+    pay: utils.throttle(async function() {
       const arr = []
       if (!this.address.id) {
         wx.showToast({title: '请先添加地址', icon: 'none'})
@@ -169,7 +170,7 @@
          wx.hideLoading()
         wx.showToast({title: json.returnMsg, icon: 'none'})
       }
-    }
+    }, 1500)
   })
 </script>
 <style lang="less">
