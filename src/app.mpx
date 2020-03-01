@@ -32,7 +32,7 @@
               })
               if (json2.returnCode == 'SUCCESS' && json2.businessCode == 100) {
                 wx.setStorageSync('userid', json2.returnData.id)
-                wx.setStorageSync('nikename', json2.returnData.nikeName)
+                wx.setStorageSync('nickname', json2.returnData.nickName)
                 wx.setStorageSync('phone', json2.returnData.phone)
               } else {
                 wx.clearStorageSync()

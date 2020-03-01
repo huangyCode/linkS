@@ -103,7 +103,7 @@
         }
       })
       if (json.returnCode == 'SUCCESS') {
-        this.setData({list: this.list.concat(json.returnData)})
+        if (json.returnData) this.setData({list: this.list.concat(json.returnData)})
       }
       wx.hideLoading()
     },
