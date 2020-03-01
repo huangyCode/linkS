@@ -23,8 +23,21 @@
       page: 1,
       statusBarHeight: wx.getSystemInfoSync()['statusBarHeight']
     },
-    onLoad () {
+    // onLoad () {
+    //   this.getList()
+    // },
+    onShow() {
+      this.setData({
+        list: [],
+        page: 1
+      })
       this.getList()
+    },
+    scrollToLower: function (e) {
+      this.setData({
+        page: this.page + 1
+      })
+      this.getList();
     },
     getList: async function() {
       const json = await wxRequest(`${wx.url}/wx/brand/api/list`, {

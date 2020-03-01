@@ -71,6 +71,13 @@
       page: 1
     },
     onLoad() {
+     
+    },
+    onShow() {
+      this.setData({
+        list: [],
+        page: 1
+      })
       this.getList()
     },
     onPullDownRefresh() {
