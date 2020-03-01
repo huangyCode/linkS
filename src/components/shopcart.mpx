@@ -134,6 +134,7 @@
         store.commit('clearMember')
       },
       getPhoneNumber: utils.throttle(function(params) {
+         console.log((new Date()).getSeconds())
           if (this.foodList[this.brandId].length == 0) {
             wx.showToast({title: '请选择商品', icon: 'none'})
             return
