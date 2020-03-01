@@ -221,7 +221,7 @@
           height: 100%;
           border-radius: 50%;
           text-align: center;
-          background: #2b343c;
+          // background: #2b343c;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -259,11 +259,11 @@
         line-height: 24px;
         padding-right: 12px;
         box-sizing: border-box;
-        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(182, 79, 79, 0.1);
         font-size: 16px;
         font-weight: 700;
         &.highlight {
-          color: #fff;
+          color:rgba(255,255,255,0.7);
         }  
       }    
       .desc {
@@ -405,7 +405,7 @@
         line-height: 24px; 
         font-size: 14px;
         font-weight: 700;
-        color: #FFFFFF;
+        color:rgba(255,255,255,0.7);
         .cartcontrol-wrapper {
           margin-left: 24rpx;
           flex: 1;

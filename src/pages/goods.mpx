@@ -2,11 +2,14 @@
 <view>
   <nav-bar title="ACL" />
   <view class="goods" style="top: {{statusBarHeight}};height: {{scrollheight}}px">
-    <scroll-view scroll-y scroll-with-animation class="menu-wrapper" id="menuWrapper" scroll-into-view="box{{currentIndex}}">
-      <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(item,index)">
-        <text class="text border-1px" id="box{{index}}">
-          {{item.name}}
-        </text>
+    <scroll-view scroll-y class="menu-wrapper-w"  scroll-with-animation  id="menuWrapper" scroll-into-view="box{{currentIndex}}">
+      <view class="menu-wrapper">
+        <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(item,index)">
+          <view class="text border-1px" id="box{{index}}">
+            <view class="short">{{item.enName}}</view>
+            <view class="short">{{item.name}}</view>
+          </view>
+        </view>
       </view>
     </scroll-view>
     <scroll-view scroll-y scroll-with-animation class="foods-wrapper" id="foodsWrapper" scroll-into-view="{{nameId}}">
@@ -21,12 +24,10 @@
               <view class="name">{{item.name}}</view>
               <view class="desc">{{item.enName}}</view>
               <view class="price">
-                {{item.price}} {{item.priceUnit}}
+                <text style="font-size:24rpx">￥</text>{{item.price}} 
                 <div class="cartcontrol-wrapper">
-                  <view>
-                    <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
-                  </view>
-                   <view><text wx:if="{{item.count > 0}}">{{item.count}}</text></view>
+                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
+                   <view><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
                   <image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
                 </div>
               </view>
@@ -120,7 +121,7 @@
         this.setData({openShop: false})
       }
       store.commit('setShopName', {name: options.name})
-      this.setData({id: options.id, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 70})
+      this.setData({id: options.id, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 100})
       this.getList();
     },
     add(index) {
@@ -216,23 +217,44 @@
   // height: 600px;
   top: 56px;
   bottom: 126px;
+  .menu-wrapper-w {
+    flex: 0 0 184rpx;
+    width: 184rpx;
+  }
   .menu-wrapper {
+    margin-right: auto;
+    margin-left: auto;
     flex: 0 0 152rpx;
     width: 152rpx;
+    min-height: 100%;
     border-radius: 16rpx;
     border:4rpx solid;
     border-image:linear-gradient(180deg, rgba(255,255,255,1), rgba(196,182,255,0)) 4 4;
     .menu-item {
       display: table;
       width:152rpx;
-      height:108rpx;
       opacity:0.97;
       margin: 38rpx 0rpx;
       text-align: center;
       font-family:PingFang-SC-Medium,PingFang-SC;
       font-weight:500;
-      color:rgba(255,255,255,1);
+      color:rgba(188,188,188,1);
       font-size: 24rpx;
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: break-word;
+      white-space: normal !important;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      .text {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        // align-items: center;
+        height: 100%;
+        min-height: 108rpx;
+      }
       &.current {
         position: relative;
         color:rgba(0,0,0,1);
@@ -246,6 +268,9 @@
         .text {
           border: none;
         }
+      }
+      .short {
+        
       }
     }
   }
@@ -289,10 +314,11 @@
       .content {
         flex: 1;
         .name {
+          height:36rpx;
           font-size:26rpx;
-          font-family:PingFangSC-Medium,PingFang SC;
           font-weight:600;
-          color:rgba(255,255,255,1);
+          color:rgba(255,255,255,0.7);
+          line-height:36rpx;
         }
         .desc{
           height:32rpx;
@@ -318,7 +344,7 @@
             justify-content: space-around;
             align-items: center;
             font-size:28rpx;
-            color: #FFF;
+            color: #A0A0A0;
             image {
               width:38rpx;
               height:38rpx;
