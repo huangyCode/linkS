@@ -283,13 +283,14 @@ page {
     display: flex;
     height: 128rpx;
     background:#151515;
-    border-radius:32rpx 32rpx 0px 0px;
+    border-radius:16rpx 32rpx 0px 0px;
     font-size: 0;
     color: rgba(255, 255, 255, 0.4);
     .content-left {
       flex: 1;
       display: flex;
       padding: 24rpx;
+      height: 54rpx;
       .price {
         display: inline-block;
         vertical-align: top;
@@ -306,6 +307,7 @@ page {
         }  
       }    
       .desc {
+        align-self: flex-end;
         display: inline-block;
         vertical-align: top;
         // margin: 12px 0 0 24px;
