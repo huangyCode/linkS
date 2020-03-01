@@ -19,7 +19,7 @@
             </view>
             <view class="content">
               <view class="name">{{item.name}}</view>
-              <view class="desc">{{item.desc}}</view>
+              <view class="desc">{{item.enName}}</view>
               <view class="price">
                 {{item.price}} {{item.priceUnit}}
                 <div class="cartcontrol-wrapper">
@@ -91,9 +91,9 @@
     computed: {
       ...store.mapState(['foodList']),
       selectFoods() {
-        let foods = [];
+        let foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
         this.goods.forEach((goods) => {
-          if (goods.count) {
+          if (goods.count && !foods.map(i =>i.id).includes(goods.id)) {
             foods.push(goods);
           }
         });
@@ -141,19 +141,19 @@
         query: { brandId: this.brandId }
       })
       if (json.returnCode == 'SUCCESS') {
-        this.setData({list: json.returnData}, ()=> {
-          if (this.first == true) {
-            this.setData({first: false})
-            this.selectMenu(json.returnData[0], 0)
-          }
-        })
+        this.setData({list: json.returnData})
+        if (json.returnData && json.returnData.length > 0) {
+           this.selectMenu(json.returnData[0], 0)
+        }
       }
     },
     selectMenu: async function(item, index) {
       const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.brandId}&sortId=${item.id}`,{method: "FORM"})
       if (json.returnCode == 'SUCCESS') {
+        const foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
+        console.log(foods, json.returnData)
         json.returnData.forEach(v => {
-          v.count = 0,
+          v.count = foods.map(i =>i.id).includes(v.id) ? foods.find(i=>i.id == v.id).count  : 0,
           v.productTypeId = item.id,
           v.productType = item.name
         } )
@@ -295,10 +295,12 @@
           color:rgba(255,255,255,1);
         }
         .desc{
+          height:32rpx;
           font-size:22rpx;
           font-family:PingFang-SC-Medium,PingFang-SC;
           font-weight:500;
-          color:rgba(255,255,255,1);
+          color:rgba(255,255,255,0.7);
+          line-height:32rpx;
           margin-bottom: 24rpx;
         }
         .price {
