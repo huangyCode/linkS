@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { values } from 'mobx'
+  import utils from '../utils/utils'
   import store from '../store/index'
   // import { multiply } from 'lodash'
   import { create, createComponent } from '@mpxjs/core'
@@ -87,12 +87,15 @@ import { values } from 'mobx'
       }
     },
     data:{
+      buttonClicked: false,
       selectFoods: ['冰茶', '冰茶', '冰茶'],
       listShow: false,
       statusBarHeight: getApp().globalData.statusBarHeight
     },
     computed: {
-      phone:  wx.getStorageSync('phone'),
+      phone() {
+        return wx.getStorageSync('phone')
+      },
       ...store.mapState(['foodList']),
       goodsNumber() {
         let num = 0
@@ -130,43 +133,47 @@ import { values } from 'mobx'
         this.setData({listShow: false})
         store.commit('clearMember')
       },
-      getPhoneNumber: async function (params) {
-        console.log(this.foodList, this.brandId)
-        if (this.foodList[this.brandId].length == 0) {
-          wx.showToast({title: '请选择商品', icon: 'none'})
-          return
-        }
-        if (wx.getStorageSync('phone')) {
-          wx.navigateTo({url: `order?brandId=${this.brandId}`})        
-        } else {
-          if (wx.getStorageSync('userid')) {
-            wx.showLoading({title: '加载中', mask: true})
-            const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
-              method: 'FORM',
-              query: {
-                sessionKey: wx.getStorageSync('sessionkey'),
-                openId: wx.getStorageSync('openid'),
-                encryptedData: params.detail.encryptedData,
-                iv: params.detail.iv
-              }
-            })
-            if (json.returnCode == 'SUCCESS') {
-              wx.setStorageSync('phone', json.returnData.phone)
-              wx.navigateTo({url: `order?brandId=${this.brandId}`})
-            }
-            wx.hideLoading()
-          } else {
-            wx.showModal({
-              title: '提示',
-              content: '请先登录',
-              showCancel: false,
-              success (res) {
-                wx.switchTab({url: 'center'})
-              }
-            })
+      getPhoneNumber: utils.throttle(function(params) {
+          if (this.foodList[this.brandId].length == 0) {
+            wx.showToast({title: '请选择商品', icon: 'none'})
+            return
           }
-        }
-      },
+          if (wx.getStorageSync('phone')) {
+            wx.showLoading({title: '加载中', mask: true})
+            setTimeout(function () {
+              wx.hideLoading()
+            }, 2000)
+            wx.navigateTo({url: `order?brandId=${this.brandId}`})
+          } else {
+            if (wx.getStorageSync('userid')) {
+              wx.showLoading({title: '加载中', mask: true})
+              wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
+                method: 'FORM',
+                query: {
+                  sessionKey: wx.getStorageSync('sessionkey'),
+                  openId: wx.getStorageSync('openid'),
+                  encryptedData: params.detail.encryptedData,
+                  iv: params.detail.iv
+                }
+              }).then(json => {
+                if (json.returnCode == 'SUCCESS') {
+                  wx.setStorageSync('phone', json.returnData.phone)
+                  wx.navigateTo({url: `order?brandId=${this.brandId}`}) 
+                }
+                wx.hideLoading()
+              })
+            } else {
+              wx.showModal({
+                title: '提示',
+                content: '请先登录',
+                showCancel: false,
+                success (res) {
+                  wx.switchTab({url: 'center'})
+                }
+              })
+            }
+          } 
+      }, 1000),
       getUserInfo: async function (res) {
         const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
           method: 'FORM',
