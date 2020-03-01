@@ -48,7 +48,7 @@
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhifufangshi@3x.png" /> 订单备注
     </view>
-    <textarea class="beak" bindinput="onChange" placeholder="可说明特殊口味等" placeholder-style="color:#FFF;"  />
+    <textarea class="beak" bindinput="onChange" placeholder="可说明特殊口味等" placeholder-style="color:#565656;"  />
   </view>
   <view class="shopcart">
     <view class="content">
