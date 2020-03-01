@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import utils from '../utils/utils'
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
