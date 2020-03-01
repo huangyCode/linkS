@@ -9,7 +9,7 @@
           </view>
           <view class="num" wx:if="{{goodsNumber > 0}}">{{goodsNumber}}</view>
         </view>
-        <view class="price highlight" >￥{{goodsPrice}}</view>
+        <view class="price highlight" ><text style="font-size: 24rpx">￥</text>{{goodsPrice}}</view>
         <view class="desc" wx:if="{{openShop}}">满{{deliveryThreshold}}起送</view>
         <view class="desc" wx:if="{{!openShop}}">店铺休息中</view>
       </view>
@@ -260,7 +260,7 @@
         padding-right: 12px;
         box-sizing: border-box;
         border-right: 1px solid rgba(182, 79, 79, 0.1);
-        font-size: 16px;
+        font-size: 40rpx;
         font-weight: 700;
         &.highlight {
           color:rgba(255,255,255,0.7);

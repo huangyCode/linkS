@@ -6,7 +6,7 @@
       <view class="menu-wrapper">
         <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(item,index)">
           <view class="text border-1px" id="box{{index}}">
-            <view class="short">{{item.enName}}</view>
+            <view class="short enName">{{item.enName}}</view>
             <view class="short">{{item.name}}</view>
           </view>
         </view>
@@ -26,9 +26,10 @@
               <view class="price">
                 <text style="font-size:24rpx">￥</text>{{item.price}} 
                 <div class="cartcontrol-wrapper">
-                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" />
-                   <view><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
-                  <image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
+                   <view class="mc">
+                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
+                   <view class="mc"><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
+                  <view class="mc"><image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
                 </div>
               </view>
             </view>
@@ -255,6 +256,9 @@
         height: 100%;
         min-height: 108rpx;
       }
+      .enName {
+        color:rgba(255,255,255,0.7);
+      }
       &.current {
         position: relative;
         color:rgba(0,0,0,1);
@@ -267,6 +271,9 @@
         border-right: 14rpx solid rgba(188,188,188,1);
         .text {
           border: none;
+        }
+        .enName {
+         color:rgba(0,0,0,1);
         }
       }
       .short {
@@ -355,6 +362,7 @@
     }
   }
 }
+
 </style>
 <script type="application/json">
   {

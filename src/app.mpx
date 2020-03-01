@@ -74,6 +74,11 @@ page {
 .mb-8 {
   margin-bottom: 8rpx
 }
+.mc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>
 
 <script type="application/json">

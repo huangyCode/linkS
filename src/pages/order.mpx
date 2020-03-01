@@ -54,7 +54,7 @@
     <view class="content">
       <view class="content-left">
         <view class="desc">合计</view>
-        <view class="price highlight" >￥{{goodsPrice}}</view>
+        <view class="price highlight" ><text style="font-size: 24rpx">￥</text>{{goodsPrice}}</view>
       </view>
       <view class="content-right">
         <button bindtap="pay" class="pay">
