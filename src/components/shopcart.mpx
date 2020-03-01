@@ -140,7 +140,7 @@ import { values } from 'mobx'
           wx.navigateTo({url: `order?brandId=${this.brandId}`})        
         } else {
           if (wx.getStorageSync('userid')) {
-            wx.showLoading({title: '加载中'})
+            wx.showLoading({title: '加载中', mask: true})
             const json = await wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
               method: 'FORM',
               query: {
