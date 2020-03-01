@@ -105,14 +105,14 @@ page {
       "list": [
         {
           "pagePath": "pages/index",
-          "iconPath": "./assets/image/tabbar/tabbar_home2@3x.png",
-          "selectedIconPath": "./assets/image/tabbar/tabbar_home@3x.png",
+          "iconPath": "./assets/image/tabbar/tabbar_home2.png",
+          "selectedIconPath": "./assets/image/tabbar/tabbar_home.png",
           "text": "Home"
         },
         {
           "pagePath": "pages/center",
-          "iconPath": "./assets/image/tabbar/tabbar_me2@3x.png",
-          "selectedIconPath": "./assets/image/tabbar/tabbar_me@3x.png",
+          "iconPath": "./assets/image/tabbar/tabbar_me2.png",
+          "selectedIconPath": "./assets/image/tabbar/tabbar_me.png",
           "text": "Me"
         }
       ]
