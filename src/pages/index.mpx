@@ -23,16 +23,16 @@
       page: 1,
       statusBarHeight: wx.getSystemInfoSync()['statusBarHeight']
     },
-    // onLoad () {
-    //   this.getList()
-    // },
-    onShow() {
-      this.setData({
-        list: [],
-        page: 1
-      })
+    onLoad () {
       this.getList()
     },
+    // onShow() {
+    //   this.setData({
+    //     list: [],
+    //     page: 1
+    //   })
+    //   this.getList()
+    // },
     scrollToLower: function (e) {
       this.setData({
         page: this.page + 1
