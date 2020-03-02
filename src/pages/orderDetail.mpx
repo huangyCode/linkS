@@ -137,6 +137,7 @@
       }
     },
     cancel: utils.throttle(async function() {
+      wx.showLoading({title: '加载中', mask: true})
       const json = await wxRequest(`${wx.url}/wx/order/api/refund`, {
         method: 'FORM',
         query: {
@@ -144,12 +145,14 @@
         }
       })
       if (json.returnCode == 'SUCCESS') {
+        wx.hideLoading()
         wx.navigateBack()
       } else {
         wx.showToast({title: json.returnData.msg, icon: 'none'})
       }
     }, 1500),
     pay: utils.throttle(async function() {
+      wx.showLoading({title: '加载中', mask: true})
       const json = await wxRequest(`${wx.url}/wx/order/api/payOrder`, {
         method: 'FORM',
         query: {orderId: this.id}
