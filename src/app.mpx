@@ -93,7 +93,6 @@ page {
       "./pages/orderDetail",
       "./pages/address",
       "./pages/order"
-     
     ],
     "permission": {
       "scope.userLocation": {

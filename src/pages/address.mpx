@@ -61,23 +61,28 @@
       contactUser: '',
       phone: '',
       detailAddress: '',
+      title: ''
     },
     onLoad(options) {
       const that = this
-      wx.getLocation({
-        type: 'wgs84',
-        success (res) {
-          that.setData({
-            longitude: res.longitude,
-            latitude: res.latitude,
-          }, ()=> {})
-        }
-      })
+      // wx.getLocation({
+      //   type: 'wgs84',
+      //   success (res) {
+      //     that.setData({
+      //       longitude: res.longitude,
+      //       latitude: res.latitude,
+      //     }, ()=> {})
+      //   }
+      // })
       this.id = options.id
       this.from = options.from
       if (options.id) {
+        this.setData({title: '修改地址'})
         this.getInfo()
+      } else {
+        this.setData({title: '新增地址'})
       }
+      
      
     },
     getInfo: async function() {

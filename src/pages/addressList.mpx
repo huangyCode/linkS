@@ -1,6 +1,6 @@
 <template>
 <view>
-  <nav-bar title="ACL" />
+  <nav-bar title="地址列表" />
   <view class="box" catchtap="handleClick(item)" wx:for="{{list}}" wx:key="index">
     <view class="table">
       <view class="row">

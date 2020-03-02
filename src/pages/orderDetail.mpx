@@ -1,6 +1,6 @@
 <template>
 <view>
-  <nav-bar title="ACL" />
+  <nav-bar title="订单详情" />
   <view class="addBtn">
     <view class="no">NO.{{order.code2}}</view>
     <view class="type" wx:if="{{order.status == 0}}">

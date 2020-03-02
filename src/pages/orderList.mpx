@@ -1,6 +1,6 @@
 <template>
 <view>
-  <nav-bar title="ACL" />
+  <nav-bar title="订单列表" />
   <navigator url="orderDetail?id={{item.id}}" class="box" wx:for="{{list}}" wx:key="index">
     <view class="title">
       <view class="left">{{item.brandName}}</view>
