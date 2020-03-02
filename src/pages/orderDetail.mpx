@@ -136,7 +136,7 @@
         wx.hideLoading()
       }
     },
-    cancel: async function() {
+    cancel: utils.throttle(async function() {
       const json = await wxRequest(`${wx.url}/wx/order/api/refund`, {
         method: 'FORM',
         query: {
@@ -148,7 +148,7 @@
       } else {
         wx.showToast({title: json.returnData.msg, icon: 'none'})
       }
-    },
+    }, 1500),
     pay: utils.throttle(async function() {
       const json = await wxRequest(`${wx.url}/wx/order/api/payOrder`, {
         method: 'FORM',
