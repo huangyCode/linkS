@@ -19,7 +19,7 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
       订单完成
     </view>
-    <view class="type" wx:if="{{order.status == 5}}">
+    <view class="type" wx:if="{{order.status >= 5}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_guanbi@3x.png" />
       已取消
     </view>
@@ -29,7 +29,8 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
     </view>
     <view class="address">
-      {{address.addressDetail}} <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" />
+      {{address.addressDetail}}
+      <!-- <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jiantoubai@3x.png" /> -->
     </view>
     <view class="info">
       <text style="margin-right: 32rpx">{{address.contactUser}}</text> {{address.phone}}
@@ -210,6 +211,10 @@ page {
   color: #A0A0A0;
   padding: 28rpx 24rpx;
   margin-bottom: 32rpx;
+  .type {
+    display: flex;
+    align-items: center;
+  }
   .no {
     display: -webkit-box;
     flex: 1;
@@ -225,7 +230,7 @@ page {
   image {
     width:28rpx;
     height:28rpx;
-    margin-right: 16rpx;
+    margin-right: 8rpx;
   }
 }
 .box {

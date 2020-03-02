@@ -26,7 +26,7 @@
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_zhong@3x.png" />
       订单完成
     </view>
-    <view class="type" wx:if="{{item.status == 5}}">
+    <view class="type" wx:if="{{item.status >= 5}}">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_guanbi@3x.png" />
       已取消
     </view>
