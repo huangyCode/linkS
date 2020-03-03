@@ -12,8 +12,9 @@ const store = createStore({
     setMember(state, { list }) {
       state.foodList = {...list}
     },
-    clearMember(state) {
-      state.foodList = {}
+    clearMember(state, id) {
+      state.foodList[id] = []
+      state.foodList = {...state.foodList}
     },
     delMember(state, { index }) {
       console.log(index)

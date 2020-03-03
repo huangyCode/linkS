@@ -37,7 +37,7 @@
         </view>
       </view>
     </view> -->
-    <view class="shopcart-list" wx:if="{{listShow && foodList[brandId].length > 0}}">
+    <view class="shopcart-list" wx:if="{{listShow}}">
       <view class="list-header">
         <view class="border">
           <view class="title">已选商品</view>
@@ -61,7 +61,7 @@
       </view>
     </view>
   </view>
-  <!-- <view class="list-mask" bind:tap="showList" wx:if="{{listShow && foodList[brandId].length > 0}}"></view> -->
+  <view class="list-mask" bind:tap="showList" wx:if="{{listShow}}"></view>
 </view>
 </template>
 
@@ -71,6 +71,7 @@
   // import { multiply } from 'lodash'
   import { create, createComponent } from '@mpxjs/core'
   import wxRequest from '../utils/request'
+import { values } from 'mobx'
   createComponent({
     properties: {
       brandId: {
@@ -117,6 +118,11 @@
         return Number(price).toFixed(2)
       }
     },
+     watch: {
+      foodList(value, old) {
+        if (!value[this.brandId]) this.setData({listShow: false})
+      }
+    },
     methods: {
       showClose() {
         wx.showToast({title: '店铺休息中...，请在营业时间下单', icon: 'none'})
@@ -133,7 +139,7 @@
       },
       clearList() {
         this.setData({listShow: false})
-        store.commit('clearMember')
+        store.commit('clearMember', this.brandId)
       },
       getPhoneNumber: utils.throttle(function(params) {
           if (this.foodList[this.brandId].length == 0) {

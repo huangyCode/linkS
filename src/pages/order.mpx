@@ -153,13 +153,13 @@
             paySign: json.returnData.data.paySign,
             success (res) {
               wx.hideLoading()
-              store.commit('clearMember')
+              store.commit('clearMember', this.brandId)
               wx.redirectTo({url: 'orderList'})
             },
             fail (res) {
               console.log(res)
               wx.hideLoading()
-              store.commit('clearMember')
+              store.commit('clearMember', this.brandId)
               wx.redirectTo({url: 'orderList'})
             }
           })

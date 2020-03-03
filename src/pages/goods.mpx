@@ -112,8 +112,7 @@
     },
     watch: {
       foodList(value, old) {
-        console.log(value)
-        const arr = value[this.brandId].map(i => i.id)
+        const arr = value[this.brandId] ? value[this.brandId].map(i => i.id) : []
         Object.keys(this.objList).forEach(i => {
             this.objList[i].forEach(item => {
               console.log(arr.includes(item.id))
@@ -190,12 +189,12 @@
       if (this.objList[item.id]) {
         this.setData({keyId: item.id})
       } else {
-        // const foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
         wx.showLoading({title: '加载中', mask: true})
         const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.brandId}&sortId=${item.id}`,{method: "FORM"})
         if (json.returnCode == 'SUCCESS') {
+          const foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
           json.returnData.forEach(v => {
-            v.count = 0 // foods.map(i =>i.id).includes(v.id) ? foods.find(i=>i.id == v.id).count  : 0,
+            v.count = foods.map(i =>i.id).includes(v.id) ? foods.find(i=>i.id == v.id).count  : 0,
             v.productTypeId = item.id,
             v.productType = item.name
           })
