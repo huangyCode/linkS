@@ -37,7 +37,7 @@
         </view>
       </view>
     </view> -->
-    <view class="shopcart-list" wx:if="{{listShow}}">
+    <view class="shopcart-list" wx:if="{{listShow && foodList[brandId].length > 0}}">
       <view class="list-header">
         <view class="border">
           <view class="title">已选商品</view>
@@ -61,7 +61,7 @@
       </view>
     </view>
   </view>
-  <view class="list-mask" bind:tap="showList" wx:if="{{listShow}}"></view>
+  <!-- <view class="list-mask" bind:tap="showList" wx:if="{{listShow && foodList[brandId].length > 0}}"></view> -->
 </view>
 </template>
 
@@ -126,7 +126,9 @@
         store.commit('setMember', {list: this.foodList})
       },
       del(index) {
+        if (this.foodList[this.brandId][index].count == 0) return
         this.foodList[this.brandId][index].count =  this.foodList[this.brandId][index].count - 1
+        if (this.foodList[this.brandId][index].count == 0) this.foodList[this.brandId].splice(index, 1)
         store.commit('setMember', {list: this.foodList})
       },
       clearList() {
@@ -386,6 +388,7 @@
     max-height: 217rpx;
     overflow: hidden;
     background: #232323;
+    overflow-y: scroll;
     .food {
       position: relative;
       padding: 12px 0;

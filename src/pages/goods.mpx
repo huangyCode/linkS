@@ -110,6 +110,24 @@
         return foods;
       },
     },
+    watch: {
+      foodList(value, old) {
+        console.log(value)
+        const arr = value[this.brandId].map(i => i.id)
+        Object.keys(this.objList).forEach(i => {
+            this.objList[i].forEach(item => {
+              console.log(arr.includes(item.id))
+              if (arr.includes(item.id)) {
+                item.count = value[this.brandId].find(i => i.id == item.id).count
+              } else {
+                item.count = 0
+              }
+            })
+          }
+        )
+        this.setData({objList: this.objList})
+      }
+    },
     onLoad(options) {
       this.brandId = options.id
       const myDate = new Date();
