@@ -4,7 +4,7 @@
   <view class="goods" style="top: {{statusBarHeight}};height: {{scrollheight}}px">
     <scroll-view scroll-y class="menu-wrapper-w"  scroll-with-animation  id="menuWrapper" scroll-into-view="box{{currentIndex}}">
       <view class="menu-wrapper">
-        <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" bind:tap="selectMenu(item,index)">
+        <view wx:for="{{list}}" wx:key="index" class="menu-item {{currentIndex===index ? 'current' : ''}}" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" bind:tap="selectMenu(item,index)">
           <view class="text border-1px" id="box{{index}}">
             <view class="short enName">{{item.enName}}</view>
             <view class="short">{{item.name}}</view>
@@ -16,24 +16,27 @@
       <view wx:key="index"  class="food-list">
         <!-- <view class="title">{{item.name}}</view>
         <view> -->
-          <view wx:for="{{goods}}" wx:key="index" class="food-item border-1px">
-            <view class="icon">
-              <image width="57" height="57" src="{{item.picUrl}}" />
-            </view>
-            <view class="content">
-              <view class="name">{{item.name}}</view>
-              <view class="desc">{{item.enName}}</view>
-              <view class="price">
-                <view><text style="font-size:24rpx">￥</text>{{item.price}}</view>
-                <view class="cartcontrol-wrapper">
-                   <view class="mc">
-                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
-                   <view class="mc"><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
-                  <view class="mc"><image bindtap="add(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
+          <block wx:for="{{objList}}"  wx:for-index="idx" wx:key="idx">
+            <div style="color:">{{idx}} {{keyId}}</div>
+            <view wx:for="{{objList[idx]}}" wx:key="index" class="food-item border-1px" style="display: {{idx == keyId ? '': 'none'}}">
+              <view class="icon">
+                <image lazy-load width="57" height="57" src="{{item.picUrl}}" />
+              </view>
+              <view class="content">
+                <view class="name">{{item.name}}</view>
+                <view class="desc">{{item.enName}}</view>
+                <view class="price">
+                  <view><text style="font-size:24rpx">￥</text>{{item.price}}</view>
+                  <view class="cartcontrol-wrapper">
+                    <view class="mc">
+                    <image wx:if="{{item.count > 0}}" bindtap="del(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
+                    <view class="mc"><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
+                    <view class="mc"><image bindtap="add(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
+                  </view>
                 </view>
               </view>
             </view>
-          </view>
+          </block>  
         <!-- </view> -->
       </view>
     </scroll-view>
@@ -90,17 +93,20 @@
       brandId: '',
       openShop: true,
       deliveryThreshold: 0,
-      shopName: ''
+      shopName: '',
+      objList: {},
+      keyId: ''
     },
     computed: {
       ...store.mapState(['foodList']),
       selectFoods() {
-        let foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
-        this.goods.forEach((goods) => {
-          if (goods.count && !foods.map(i =>i.id).includes(goods.id)) {
-            foods.push(goods);
+        let foods =  [];
+        Object.keys(this.objList).forEach(i => {
+            this.objList[i].forEach(item => {
+              if (item.count > 0) foods.push(item)
+            })
           }
-        });
+        )
         return foods;
       },
     },
@@ -135,15 +141,17 @@
       clearTimeout(this.longPressTimer);
     },
     add(index) {
-      this.goods[index].count =  this.goods[index].count + 1
-      this.setData({goods: this.goods})
+      this.objList[this.keyId][index].count =  this.objList[this.keyId][index].count + 1
+      console.log(this.objList[this.keyId][index])
+      this.setData({objList: this.objList})
+      console.log(this.selectFoods)
       this.foodList[this.brandId] = this.selectFoods
       store.commit('setMember', {list: this.foodList})
     },
     del(index) {
-      if (this.goods[index].count == 0) return 
-      this.goods[index].count =  this.goods[index].count - 1
-      this.setData({goods: this.goods})
+      if (this.objList[this.keyId][index].count == 0) return 
+      this.objList[this.keyId][index].count =  this.objList[this.keyId][index].count - 1
+      this.setData({objList: this.objList})
       this.foodList[this.brandId] = this.selectFoods
       store.commit('setMember', {list: this.foodList})
     },
@@ -160,18 +168,25 @@
       }
     },
     selectMenu: async function(item, index) {
-      const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.brandId}&sortId=${item.id}`,{method: "FORM"})
-      if (json.returnCode == 'SUCCESS') {
-        const foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
-        console.log(foods, json.returnData)
-        json.returnData.forEach(v => {
-          v.count = foods.map(i =>i.id).includes(v.id) ? foods.find(i=>i.id == v.id).count  : 0,
-          v.productTypeId = item.id,
-          v.productType = item.name
-        } )
-        this.setData({goods: json.returnData})
-      }
       this.setData({currentIndex: index})
+      if (this.objList[item.id]) {
+        this.setData({keyId: item.id})
+      } else {
+        // const foods = this.foodList[this.brandId] ? [...this.foodList[this.brandId]] : [];
+        wx.showLoading({title: '加载中', mask: true})
+        const json = await wxRequest(`${wx.url}/wx/product/api/findProList?brandId=${this.brandId}&sortId=${item.id}`,{method: "FORM"})
+        if (json.returnCode == 'SUCCESS') {
+          json.returnData.forEach(v => {
+            v.count = 0 // foods.map(i =>i.id).includes(v.id) ? foods.find(i=>i.id == v.id).count  : 0,
+            v.productTypeId = item.id,
+            v.productType = item.name
+          })
+          this.objList[item.id] = json.returnData
+          this.setData({objList: this.objList, keyId: item.id})
+        }
+        wx.hideLoading()
+      }
+      
     },
     getPhoneNumber: async function (params) {
       console.log(params)
