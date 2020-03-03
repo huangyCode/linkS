@@ -27,9 +27,9 @@
                 <view><text style="font-size:24rpx">￥</text>{{item.price}}</view>
                 <view class="cartcontrol-wrapper">
                    <view class="mc">
-                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
+                  <image wx:if="{{item.count > 0}}" bindtap="del(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd" src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jian@3x.png" /></view>
                    <view class="mc"><text wx:if="{{item.count > 0}}">{{item.count}}{{item.unit}}</text></view>
-                  <view class="mc"><image bindtap="add(index)"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
+                  <view class="mc"><image bindtap="add(index)" hover-stay-time="70" bind:touchstart="onTouchStart" bind:touchend="onTouchEnd"  src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" /></view>
                 </view>
               </view>
             </view>
@@ -70,6 +70,7 @@
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
+  const LONG_PRESS_START_TIME = 600;
   createPage({
     data: {
       id: '',
@@ -111,12 +112,9 @@
       const time = new Date(`${day} ${hms}`).getTime()
       const beginDate = new Date(`${day} ${options.openTime}`).getTime();
       let endDate = new Date(`${day} ${options.closeTime}`).getTime();
-      console.log(new Date(`${day} ${options.closeTime}`).getTime(), new Date(`${day} ${options.openTime}`).getTime())
       if (new Date(`${day} ${options.closeTime}`).getTime() < new Date(`${day} ${options.openTime}`).getTime()) {
         endDate = addDays(new Date(`${day} ${options.closeTime}`), 1).getTime();
       }
-      console.log(`${day} ${hms}`, `${day} ${options.openTime}`, `${day} ${options.closeTime}`)
-      console.log(time, beginDate, endDate)
       if (time >= beginDate && time <= endDate) {
         this.setData({openShop: true})
       } else {
@@ -126,17 +124,28 @@
       this.setData({id: options.id, shopName: options.name, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 100})
       this.getList();
     },
+    onTouchStart(event) {
+      clearTimeout(this.longPressTimer);
+      this.isLongPress = false;
+      this.longPressTimer = setTimeout(() => {
+          this.isLongPress = true;
+      }, LONG_PRESS_START_TIME);
+    },
+    onTouchEnd() {
+      clearTimeout(this.longPressTimer);
+    },
     add(index) {
       this.goods[index].count =  this.goods[index].count + 1
+      this.setData({goods: this.goods})
       this.foodList[this.brandId] = this.selectFoods
       store.commit('setMember', {list: this.foodList})
-      this.setData({goods: this.goods})
     },
     del(index) {
+      if (this.goods[index].count == 0) return 
       this.goods[index].count =  this.goods[index].count - 1
+      this.setData({goods: this.goods})
       this.foodList[this.brandId] = this.selectFoods
       store.commit('setMember', {list: this.foodList})
-      this.setData({goods: this.goods})
     },
     getList: async function() {
       const json = await wxRequest(`${wx.url}/wx/product/api/sortList`,{
@@ -187,25 +196,6 @@
       })
       console.log(res)
     },
-    // _calculateHeight() {
-    //   const query = wx.createSelectorQuery()    // 创建节点查询器 query
-    //   this.goods.map((item, index)=> {
-    //     console.log()
-    //     query.select(`#id${index}`).boundingClientRect()
-    //   })
-    //   // query.selectViewport().scrollOffset()                 // 这段代码的意思是获取页面滑动位置的查询请求
-    //   query.exec((res) => {
-    //     console.log(res)
-    //     let height = 0;
-    //     this.listHeight.push(height);
-    //     for (let i = 0; i < res.length; i++) {
-    //       let item = res[i];
-    //       height += item.height;
-    //       this.listHeight.push(height);
-    //     }
-    //     this.setData({listHeight: this.listHeight})
-    //   })
-    // }
   })
 </script>
 <style lang="less">
