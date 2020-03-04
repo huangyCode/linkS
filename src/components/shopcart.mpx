@@ -162,7 +162,7 @@ import { values } from 'mobx'
               }).then(json => {
                 if (json.returnCode == 'SUCCESS') {
                   wx.setStorageSync('phone', json.returnData.phone)
-                  wx.navigateTo({url: `order?brandId=${this.brandId}`}) 
+                  wx.navigateTo({url: `order?brandId=${this.brandId}`})
                 }
                 wx.hideLoading()
               })
@@ -176,7 +176,7 @@ import { values } from 'mobx'
                 }
               })
             }
-          } 
+          }
       }, 1500),
       getUserInfo: async function (res) {
         const json = await wxRequest(`${wx.url}/wx/user/api/login`, {
@@ -193,7 +193,7 @@ import { values } from 'mobx'
         this.setData({listShow: !this.listShow})
       }
     },
-   
+
   })
 </script>
 <style lang="less">
@@ -235,15 +235,15 @@ import { values } from 'mobx'
           justify-content: center;
           &.highlight {
             background: rgb(0, 160, 220);
-          }  
+          }
           .icon-shopping_cart {
               width: 36rpx;
               height: 36rpx;
             &.highlight {
               color: #fff;
-            }   
-          }    
-        }      
+            }
+          }
+        }
         .num {
           position: absolute;
           top: 0;
@@ -259,7 +259,7 @@ import { values } from 'mobx'
           background: #ECECEC;
           box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);
         }
-      }    
+      }
       .price {
         display: inline-block;
         vertical-align: top;
@@ -272,8 +272,8 @@ import { values } from 'mobx'
         font-weight: 700;
         &.highlight {
           color:rgba(255,255,255,0.7);
-        }  
-      }    
+        }
+      }
       .desc {
         display: inline-block;
         vertical-align: top;
@@ -283,7 +283,7 @@ import { values } from 'mobx'
         font-weight:400;
         color:#565656;
         line-height:34rpx;
-      }  
+      }
     }
     .content-right {
       flex: 0 0 105px;
@@ -350,7 +350,7 @@ import { values } from 'mobx'
         background: rgb(0, 160, 220);
         transition: all 0.4s linear;
       }
-    }   
+    }
   }
 }
 .shopcart-list {
@@ -398,8 +398,8 @@ import { values } from 'mobx'
     .food {
       position: relative;
       padding: 12px 0;
-      box-sizing: border-box; 
-      display: flex; 
+      box-sizing: border-box;
+      display: flex;
       .name {
         flex: 1;
         line-height: 24px;
@@ -414,7 +414,7 @@ import { values } from 'mobx'
         align-items: center;
         right: 90px;
         bottom: 12px;
-        line-height: 24px; 
+        line-height: 24px;
         font-size: 14px;
         font-weight: 700;
         color:rgba(255,255,255,0.7);
@@ -432,10 +432,10 @@ import { values } from 'mobx'
           }
         }
       }
-      
-    }   
+
+    }
   }
-}  
+}
 .list-mask {
   position: fixed;
   top: 0;
@@ -443,16 +443,15 @@ import { values } from 'mobx'
   width: 100%;
   height: 100%;
   z-index: 40;
-  backdrop-filter: blur(10px);
   opacity: 1;
   background: rgba(7, 17, 27, 0.6);
   &.fade-enter-active, &.fade-leave-active {
     transition: all 0.5s;
-  }  
+  }
   &.fade-enter, &.fade-leave-active {
     opacity: 0;
     background: rgba(7, 17, 27, 0);
-  }  
+  }
 }
 .none {
   height: auto;
