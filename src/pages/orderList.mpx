@@ -1,6 +1,12 @@
 <template>
 <view>
   <nav-bar title="订单列表" />
+  <view  class="box" wx:if="{{list.length < 1}}">
+    <view class="title"></view>
+    <view class="order">
+      <view class="no">暂无订单</view>
+    </view>  
+  </view>
   <navigator url="orderDetail?id={{item.id}}" class="box" wx:for="{{list}}" wx:key="index">
     <view class="title">
       <view class="left">{{item.brandName}}</view>

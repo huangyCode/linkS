@@ -46,6 +46,7 @@
       </view>
       <view class="list-content">
         <view>
+          <view class="food" style="text-align: center; color: #FFF" wx:if="{{!foodList[brandId] || foodList[brandId].length < 1}}"> 暂无商品加入购物车 </view>
           <view class="food" wx:for="{{foodList[brandId]}}">
             <view class="name">{{item.name}}</view>
             <view class="price">
@@ -189,7 +190,7 @@ import { values } from 'mobx'
         console.log(res)
       },
       showList() {
-        console.log(this.foodList)
+        if (!this.foodList[this.brandId] || this.foodList[this.brandId].length < 1 ) return
         this.setData({listShow: !this.listShow})
       }
     },

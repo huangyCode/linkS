@@ -15,7 +15,7 @@ createPage({
 <style lang="less">
 page {
   background-color: #000;
-  background-image: url('../assets/image/open.jpg');
+  background-image: url('../assets/image/open.png');
   background-repeat:no-repeat;
   background-size:100% 100%;
 }
