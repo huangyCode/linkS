@@ -114,6 +114,7 @@
       }
     },
     pay: utils.throttle(async function() {
+      const that = this
       const arr = []
       if (!this.address.id) {
         wx.showToast({title: '请先添加地址', icon: 'none'})
@@ -145,6 +146,7 @@
       })
       if (json.returnCode == 'SUCCESS') {
         if (json.returnData.status == 200) {
+          
           wx.requestPayment({
             timeStamp: json.returnData.data.timeStamp,
             nonceStr: json.returnData.data.nonceStr,
@@ -153,13 +155,13 @@
             paySign: json.returnData.data.paySign,
             success (res) {
               wx.hideLoading()
-              store.commit('clearMember', this.brandId)
+              store.commit('clearMember', that.brandId)
               wx.redirectTo({url: 'orderList'})
             },
             fail (res) {
               console.log(res)
               wx.hideLoading()
-              store.commit('clearMember', this.brandId)
+              store.commit('clearMember', that.brandId)
               wx.redirectTo({url: 'orderList'})
             }
           })
