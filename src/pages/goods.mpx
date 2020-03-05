@@ -127,7 +127,18 @@
         this.setData({objList: this.objList})
       }
     },
+    onShareAppMessage: function (res) {
+      const obj = this.obj
+      if (res.from === 'button') {}
+      return {
+        title: `${obj.desc}`,
+        imageUrl: `${obj.picUrl}`,
+        path: `/pages/goods?id=${obj.id}&desc=${obj.desc}&picUrl=${obj.picUrl}&name=${obj.name}&deliveryThreshold=${obj.deliveryThreshold}&openTime=${obj.openTime}&closeTime=${obj.closeTime}`
+      }
+    },
     onLoad(options) {
+      console.log(options)
+      this.obj = options
       this.brandId = options.id
       const myDate = new Date();
       const day = `${myDate.getFullYear()}/${myDate.getMonth()+1}/${myDate.getDate()}`

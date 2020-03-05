@@ -3,7 +3,7 @@
   <nav-bar title="LINKS"  back="{{false}}" />
   <image class="logo" src="../assets/image/NJ.png" style="margin: 0px 30rpx 58rpx" />
   <view class="list">
-    <navigator url="./goods?id={{item.id}}&name={{item.name}}&deliveryThreshold={{item.deliveryThreshold}}&openTime={{item.openTime}}&closeTime={{item.closeTime}}" class="item" wx:for="{{list}}" wx:key="index">
+    <navigator url="./goods?id={{item.id}}&desc={{item.desc}}&picUrl={{item.picUrl}}&name={{item.name}}&deliveryThreshold={{item.deliveryThreshold}}&openTime={{item.openTime}}&closeTime={{item.closeTime}}" class="item" wx:for="{{list}}" wx:key="index">
       <image src="{{item.picUrl}}" mode="aspectFill" class="pic" />
       <view class="content">
         <view class="title mb-8">{{item.name}}</view>
@@ -25,6 +25,12 @@
     },
     onLoad () {
       this.getList()
+    },
+    onShareAppMessage: function (res) {
+      if (res.from === 'button') {}
+      return {
+        path: '/pages/index'
+      }
     },
     // onShow() {
     //   this.setData({

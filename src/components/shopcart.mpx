@@ -187,10 +187,9 @@ import { values } from 'mobx'
             openId: wx.getStorageSync('openid')
           }
         })
-        console.log(res)
       },
       showList() {
-        if (!this.foodList[this.brandId] || this.foodList[this.brandId].length < 1 ) return
+        if (!this.foodList[this.brandId]  || (this.foodList[this.brandId].length < 1 && this.listShow == false)) return
         this.setData({listShow: !this.listShow})
       }
     },
