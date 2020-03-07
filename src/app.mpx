@@ -91,7 +91,7 @@ page {
       "./pages/orderList",
       "./pages/addressList",
       "./pages/orderDetail",
-      "./pages/address",
+       "./pages/address",
       "./pages/order"
     ],
     "permission": {

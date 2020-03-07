@@ -1,7 +1,7 @@
 <template>
 <view>
   <nav-bar title="LINKS"  back="{{false}}" />
-  <image class="logo" src="../assets/image/NJ.png" style="margin: 0px 30rpx 58rpx" />
+  <!-- <image class="logo" src="../assets/image/NJ.png" style="margin: 0px 30rpx 58rpx" /> -->
   <view class="list">
     <navigator url="./goods?id={{item.id}}&desc={{item.desc}}&picUrl={{item.picUrl}}&name={{item.name}}&deliveryThreshold={{item.deliveryThreshold}}&openTime={{item.openTime}}&closeTime={{item.closeTime}}" class="item" wx:for="{{list}}" wx:key="index">
       <image src="{{item.picUrl}}" mode="aspectFill" class="pic" />

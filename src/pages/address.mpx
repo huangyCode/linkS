@@ -4,14 +4,19 @@
   <view class="box">
     联系人
     <view class="name">
-      <input name="contactUser" value="{{contactUser}}"  class="input" />
+     
+        <input name="contactUser" value="{{contactUser}}"  class="input" />
+      </button>
       <view class="sex">
         <view bindtap="changeSex(1)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 先生</view>
         <view bindtap="changeSex(2)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{sex==2 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 女士</view>
       </view>
     </view>
     电话
-    <input name="phone" value="{{phone}}"  class="phone" type="number" />
+    <button wx:if="{{!phoneShow}}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"  hover-class="none" class="link">  
+      <input name="phone" value="{{phone}}"  class="phone" type="number" />
+    </button>
+    <input wx:if="{{phoneShow}}" name="phone" value="{{phone}}"  class="phone" type="number" />
     所在地区
     <picker name="region" mode="region" bindchange="bindRegionChange">
       <input class="phone" value="{{region}}" disabled />
@@ -47,6 +52,7 @@
   import store from '../store/index'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
+import { values } from 'mobx'
   createPage({
     data: {
       sex: 1,
@@ -80,10 +86,16 @@
         this.setData({title: '修改地址'})
         this.getInfo()
       } else {
+        if (wx.getStorageSync('phone')) {
+          this.setData({phone: wx.getStorageSync('phone')})
+        }
         this.setData({title: '新增地址'})
       }
-      
-     
+    },
+    computed: {
+      phoneShow() {
+        return wx.getStorageSync('phone')
+      },
     },
     getInfo: async function() {
       const json = await wxRequest(`${wx.url}/wx/user/api/detailAddr`, {
@@ -123,6 +135,30 @@
           })
         }
       })
+    },
+    getPhoneNumber(params) {
+      const that = this
+      if (params.detail.errMsg== "getPhoneNumber:ok") {
+        if (wx.getStorageSync('phone')) {
+          this.setData({phone: wx.getStorageSync('phone')})
+        } else {
+          wxRequest(`${wx.url}/wx/user/api/bindPhone`, {
+            method: 'FORM',
+            query: {
+              sessionKey: wx.getStorageSync('sessionkey'),
+              openId: wx.getStorageSync('openid'),
+              encryptedData: params.detail.encryptedData,
+              iv: params.detail.iv
+            }
+          }).then(json => {
+            if (json.returnCode == 'SUCCESS') {
+              wx.setStorageSync('phone', json.returnData.phone)
+              that.setData({phone: wx.getStorageSync('phone')})
+            }
+            wx.hideLoading()
+          })
+        }
+      }
     },
     changeSex(value) {
       this.setData({sex: value})
@@ -207,6 +243,19 @@ page {
   box-sizing: border-box;
   padding: 32rpx;
   margin-bottom: 120rpx;
+}
+.link {
+  font-size: 28rpx;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  background-color:transparent;
+}
+
+.link::after {
+  content:none;
+  border: none;
 }
 .addBtn {
   display: flex;
