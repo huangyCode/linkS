@@ -14,7 +14,7 @@
     </view>
     电话
     <button wx:if="{{!phoneShow}}" open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"  hover-class="none" class="link">  
-      <input name="phone" value="{{phone}}"  class="phone" type="number" />
+      <input name="phone" disabled value="{{phone}}"  class="phone" type="number" />
     </button>
     <input wx:if="{{phoneShow}}" name="phone" value="{{phone}}"  class="phone" type="number" />
     所在地区

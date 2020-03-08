@@ -75,7 +75,6 @@
   // import { multiply } from 'lodash'
   import { create, createComponent } from '@mpxjs/core'
   import wxRequest from '../utils/request'
-import { values } from 'mobx'
   createComponent({
     properties: {
       brandId: {

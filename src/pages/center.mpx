@@ -31,6 +31,7 @@
 </template>
 
 <script>
+  import utils from '../utils/utils'
   import { createPage } from '@mpxjs/core'
   import wxRequest from '../utils/request'
   createPage({
@@ -46,7 +47,7 @@
         })
       }
     },
-    linkto: async function(res) {
+    linkto: utils.throttle(async function(res) {
       console.log(res)
      if (res.detail.userInfo) {
       if (wx.getStorageSync('userid')) {
@@ -74,7 +75,7 @@
         }
       }
      }
-    },
+    }, 1500),
     getUserInfo: async function (res) {
       console.log(res)
       this.setData({
