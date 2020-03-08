@@ -67,7 +67,8 @@ import { values } from 'mobx'
       contactUser: '',
       phone: '',
       detailAddress: '',
-      title: ''
+      title: '',
+      phoneShow: false,
     },
     onLoad(options) {
       const that = this
@@ -87,14 +88,15 @@ import { values } from 'mobx'
         this.getInfo()
       } else {
         if (wx.getStorageSync('phone')) {
-          this.setData({phone: wx.getStorageSync('phone')})
+          this.setData({phoneShow: true})
         }
         this.setData({title: '新增地址'})
       }
     },
-    computed: {
-      phoneShow() {
-        return wx.getStorageSync('phone')
+    watch: {
+      phone(value) {
+        console.log(value)
+        if (wx.getStorageSync('phone'))  this.setData({phoneShow: true})
       },
     },
     getInfo: async function() {
@@ -251,6 +253,7 @@ page {
   margin: 0;
   line-height: 1;
   background-color:transparent;
+  text-align: left;
 }
 
 .link::after {
