@@ -115,6 +115,7 @@ page {
   margin: 0;
   line-height: 1;
   background-color:transparent;
+  border-radius: 0px;
 }
 
 .link::after {
