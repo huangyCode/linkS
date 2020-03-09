@@ -186,7 +186,7 @@ import { values } from 'mobx'
         wx.showToast({title: '请填写正确手机号', icon: 'none'})
         return
       } 
-      if (!region && region.length < 3) {
+      if (!region || region.length < 3) {
         wx.showToast({title: '请选择地区', icon: 'none'})
         return
       }
@@ -235,8 +235,6 @@ import { values } from 'mobx'
           wx.showToast({title: json.returnMsg, icon: 'none'})
         }
       }
-     
-     
     }, 1500)
   })
 </script>
