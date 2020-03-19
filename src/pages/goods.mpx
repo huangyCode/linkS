@@ -137,23 +137,32 @@
       }
     },
     onLoad(options) {
-      console.log(options)
       this.obj = options
       this.brandId = options.id
       const myDate = new Date();
       const day = `${myDate.getFullYear()}/${myDate.getMonth()+1}/${myDate.getDate()}`
       const hms = `${myDate.getHours() < 10 ? "0" + myDate.getHours() : myDate.getHours()}:${myDate.getMinutes() < 10 ? "0" + myDate.getMinutes() : myDate.getMinutes()}:${myDate.getSeconds() < 10 ? "0" + myDate.getSeconds() : myDate.getSeconds()}`
-      const time = new Date(`${day} ${hms}`).getTime()
-      const beginDate = new Date(`${day} ${options.openTime}`).getTime();
-      let endDate = new Date(`${day} ${options.closeTime}`).getTime();
+      const time = new Date(`${day} ${hms}`).getTime() // 当前时间
+      const center = new Date(`${day} 12:00:00`).getTime() // 当日中间
+      const beginDate = new Date(`${day} ${options.openTime}`).getTime(); // 开始时间
+      let endDate = new Date(`${day} ${options.closeTime}`).getTime(); // 结束时间
       if (new Date(`${day} ${options.closeTime}`).getTime() < new Date(`${day} ${options.openTime}`).getTime()) {
-        endDate = addDays(new Date(`${day} ${options.closeTime}`), 1).getTime();
+        endDate = addDays(new Date(`${day} ${options.closeTime}`), 1).getTime(); // 结束时间小于开始时间 + 1天
       }
-      if (time >= beginDate && time <= endDate) {
-        this.setData({openShop: true})
+      if (endDate < center && beginDate > center) {
+        if (time >= beginDate || time <= endDate) {
+          this.setData({openShop: true})
+        } else {
+          this.setData({openShop: false})
+        }
       } else {
-        this.setData({openShop: false})
+        if (time >= beginDate && time <= endDate) {
+          this.setData({openShop: true})
+        } else {
+          this.setData({openShop: false})
+        }
       }
+      
       store.commit('setShopName', {name: options.name})
       this.setData({id: options.id, shopName: options.name, deliveryThreshold: options.deliveryThreshold, scrollheight: this.screenHeight - this.statusBarHeight - 100})
       this.getList();
