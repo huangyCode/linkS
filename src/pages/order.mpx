@@ -5,6 +5,15 @@
     <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_jia@3x.png" />
     添加收获地址
   </navigator>
+  <view class="box"> 
+    <view class="header">
+      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
+    </view>
+    <view class="sex">
+      <view class="item" bindtap="changeType(0)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{deliverType==0 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 外卖配送</view>
+      <view class="item" bindtap="changeType(1)"><image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_{{deliverType==1 ? 'xuanzhong':'weixuanzhong'}}@3x.png" /> 到店取餐</view>
+    </view>
+  </view>
   <navigator url="addressList?from=order" class="box" wx:if="{{address.id}}">
     <view class="header">
       <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 地址信息
@@ -73,6 +82,7 @@
   import wxRequest from '../utils/request'
   createPage({
     data: {
+      deliverType: 0,
       list: [],
       page: 1,
       addressList: [{}],
@@ -98,6 +108,10 @@
     },
     onChange(e) {
       this.setData({desc: e.detail.value})
+    },
+    changeType(value) {
+      console.log(value)
+      this.setData({deliverType: value})
     },
     getaddressList: async function() {
       const json = await wxRequest(`${wx.url}/wx/user/api/addrList`, {
@@ -133,6 +147,7 @@
       const obj = {
         openId: wx.getStorageSync('openid'),
         userId: wx.getStorageSync('userid'),
+        deliverType: this.deliverType,
         brandId: Number(this.brandId),
         addressId: this.address.id,
         desc: this.desc,
@@ -182,6 +197,25 @@ page {
   box-sizing: border-box;
   padding: 32rpx;
   margin-bottom: 120rpx;
+}
+.sex {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1;
+  font-size:28rpx;
+  color: #FFF;
+  padding: 24rpx;
+  .item {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  image {
+    width:28rpx;
+    height:28rpx;
+    margin: 0 16rpx;
+  }
 }
 .addBtn {
   display: flex;

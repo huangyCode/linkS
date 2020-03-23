@@ -9,7 +9,7 @@
     },
     onLaunch: function () {
       const that = this
-      wx.url = 'https://links.doallcollect.com' //'http://47.114.129.233:8888'//  'http://1g5045n525.iask.in' //
+      wx.url = 'http://47.114.129.233:8888' //'http://47.114.129.233:8888'//  'http://1g5045n525.iask.in' //
       wx.login({
         success: async function(res) {
           if (res.code) {
@@ -91,8 +91,8 @@ page {
       "./pages/orderList",
       "./pages/addressList",
       "./pages/orderDetail",
-      "./pages/address",
-      "./pages/order"
+      "./pages/order",
+      "./pages/address"
     ],
     "permission": {
       "scope.userLocation": {
