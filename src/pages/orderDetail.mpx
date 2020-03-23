@@ -26,9 +26,9 @@
   </view>
   <view class="box">
     <view class="header">
-      <image src="https://linkstyle2.oss-cn-hangzhou.aliyuncs.com/iCON_dingwei@3x.png" /> 配送信息
+      <image src="../assets/image/iCON_yunsong2.png" /> 配送信息
     </view>
-    <view class="info" wx:if="{{order.trace.status != 1 && order.trace.status != 1000}}">
+    <view class="info" wx:if="{{order.trace.status != 1 && order.trace.status != 1000}}" bind:tap="callPhone(order.trace.dmMobile)">
       <text style="margin-right: 32rpx">骑手:</text> <text style="margin-right: 32rpx">{{order.trace.dmName}}</text> <text>({{order.trace.dmMobile}})</text>
     </view>
     <view class="info">
@@ -104,9 +104,9 @@
         <view class="cell">商家品牌</view>
         <view class="cell">{{order.brandName}}</view>
       </view>
-      <view class="row" style="width: 20%" bind:tap="callPhone(order)">
+      <view class="row" style="width: 20%" bind:tap="callPhone(order.brandPhone)">
         <view class="cell">商家电话</view>
-        <view class="cell" >{{order.brandPhone}}</view>
+        <view class="cell" style="display:flex;align-items:center" >{{order.brandPhone}}<image style="margin-left:50rpx;width: 28rpx;height: 28rpx;" src="../assets/image/iCON_tel.png" /></view>
       </view>
     </view>
   </view>
@@ -141,8 +141,9 @@
     onShow() {
       this.getInfo()
     },
-    callPhone: function(item) {
-      wx.makePhoneCall({phoneNumber: item.brandPhone})
+    callPhone: function(phoneNumber) {
+      console.log(phoneNumber)
+      wx.makePhoneCall({phoneNumber: phoneNumber})
     },
     getInfo: async function() {
       wx.showLoading({title: '加载中', mask: true})
